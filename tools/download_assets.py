@@ -21,7 +21,7 @@ if __name__ == "__main__":
     dl_model(RVC_DOWNLOAD_LINK, "hubert_base.pt", BASE_DIR / "assets/hubert")
     print("Downloading rmvpe.pt...")
     dl_model(RVC_DOWNLOAD_LINK, "rmvpe.pt", BASE_DIR / "assets/rmvpe")
-    print("Downloading rmvpe.pt...")
+    print("Downloading rmvpe.onnx...")
     dl_model(RVC_DOWNLOAD_LINK, "rmvpe.onnx", BASE_DIR / "assets/rmvpe")
     print("Downloading vocals.onnx...")
     dl_model(
