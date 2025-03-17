@@ -21,12 +21,18 @@ if __name__ == "__main__":
     dl_model(RVC_DOWNLOAD_LINK, "hubert_base.pt", BASE_DIR / "assets/hubert")
     print("Downloading rmvpe.pt...")
     dl_model(RVC_DOWNLOAD_LINK, "rmvpe.pt", BASE_DIR / "assets/rmvpe")
+    print("Downloading rmvpe.pt...")
+    dl_model(RVC_DOWNLOAD_LINK, "rmvpe.onnx", BASE_DIR / "assets/rmvpe")
     print("Downloading vocals.onnx...")
     dl_model(
         RVC_DOWNLOAD_LINK + "uvr5_weights/onnx_dereverb_By_FoxJoy/",
         "vocals.onnx",
         BASE_DIR / "assets/uvr5_weights/onnx_dereverb_By_FoxJoy",
     )
+    dl_model(RVC_DOWNLOAD_LINK, "ffprobe.exe", BASE_DIR / "./")
+    print("Downloading ffprobe.exe...")
+    dl_model(RVC_DOWNLOAD_LINK, "ffmpeg.exe", BASE_DIR / "./")
+    print("Downloading ffmpeg.exe...")
 
     rvc_models_dir = BASE_DIR / "assets/pretrained"
 
