@@ -17,10 +17,6 @@ from infer.lib.infer_pack.models import (
 )
 from infer.modules.vc.pipeline import Pipeline
 from infer.modules.vc.utils import *
-from fairseq.data.dictionary import Dictionary
-import torch
-
-torch.serialization.add_safe_globals([Dictionary])
 
 class VC:
     def __init__(self, config):

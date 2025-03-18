@@ -59,6 +59,7 @@ ffmpy = "0.3.1"
 torchvision = "0.19.1"
 freesimplegui = "^5.2.0"
 torch-directml = "^0.2.5.dev240914"
+requests = "^2.29.0"
 [tool.poetry.dev-dependencies]
 
 [build-system]
