@@ -518,17 +518,18 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 label=i18n("变调(整数, 半音数量, 升八度12降八度-12)"),
                                 value=0,
                             )
-                            input_audio0 = gr.Textbox(
-                                label=i18n(
-                                    "输入待处理音频文件路径(默认是正确格式示例)"
-                                ),
-                                placeholder="C:\\Users\\Desktop\\audio_example.wav",
-                            )
-                            file_index1 = gr.File(
-                                label=i18n("特征检索库文件路径,为空则使用下拉的选择结果"),
+                            input_audio0 = gr.File(
+                                label=i18n("输入待处理音频文件路径(默认是正确格式示例)"),
                                 file_count="single",
                                 file_types=[".index"],
                                 interactive=True
+                            )
+                            file_index1 = gr.Textbox(
+                                label=i18n(
+                                    "特征检索库文件路径,为空则使用下拉的选择结果"
+                                ),
+                                placeholder="C:\\Users\\Desktop\\model_example.index",
+                                interactive=True,
                             )
                             file_index2 = gr.Dropdown(
                                 label=i18n("自动检测index路径,下拉式选择(dropdown)"),
