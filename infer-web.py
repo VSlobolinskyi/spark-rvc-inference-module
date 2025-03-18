@@ -134,6 +134,20 @@ for name in os.listdir(weight_root):
         names.append(name)
 index_paths = []
 
+def update_audio_path(uploaded_file):
+    # If no file was uploaded, return an empty string.
+    if uploaded_file is None:
+        return ""
+    # If multiple files were allowed, take the first one.
+    if isinstance(uploaded_file, list):
+        uploaded_file = uploaded_file[0]
+    # Depending on Gradio version, the file may be a dict or an object with a 'name' attribute.
+    if isinstance(uploaded_file, dict):
+        return uploaded_file.get("name", "")
+    if hasattr(uploaded_file, "name"):
+        return uploaded_file.name
+    return str(uploaded_file)
+
 
 def lookup_indices(index_root):
     global index_paths
@@ -518,16 +532,25 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 label=i18n("变调(整数, 半音数量, 升八度12降八度-12)"),
                                 value=0,
                             )
-                            input_audio0 = gr.File(
-                                label=i18n("输入待处理音频文件路径(默认是正确格式示例)"),
+                            # Add a file uploader for drag & drop.
+                            audio_upload = gr.File(
+                                label=i18n("拖拽或选择音频文件"),
+                                file_types=[".wav"],
                                 file_count="single",
-                                file_types=[".index"],
-                                interactive=True
+                                interactive=True,
+                            )
+                            # Existing textbox for the audio file path.
+                            input_audio0 = gr.Textbox(
+                                label=i18n("输入待处理音频文件路径(默认是正确格式示例)"),
+                                placeholder="C:\\Users\\Desktop\\model_example.wav",
+                                interactive=True,
+                            )
+                            # When a file is uploaded, update the textbox.
+                            audio_upload.change(
+                                fn=update_audio_path, inputs=audio_upload, outputs=input_audio0
                             )
                             file_index1 = gr.Textbox(
-                                label=i18n(
-                                    "特征检索库文件路径,为空则使用下拉的选择结果"
-                                ),
+                                label=i18n("特征检索库文件路径,为空则使用下拉的选择结果"),
                                 placeholder="C:\\Users\\Desktop\\model_example.index",
                                 interactive=True,
                             )
@@ -540,11 +563,7 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 label=i18n(
                                     "选择音高提取算法,输入歌声可用pm提速,harvest低音好但巨慢无比,crepe效果好但吃GPU,rmvpe效果最好且微吃GPU"
                                 ),
-                                choices=(
-                                    ["pm", "harvest", "crepe", "rmvpe"]
-                                    if config.dml == False
-                                    else ["pm", "harvest", "rmvpe"]
-                                ),
+                                choices=(["pm", "harvest", "crepe", "rmvpe"] if config.dml == False else ["pm", "harvest", "rmvpe"]),
                                 value="rmvpe",
                                 interactive=True,
                             )
@@ -561,18 +580,14 @@ with gr.Blocks(title="RVC WebUI") as app:
                             rms_mix_rate0 = gr.Slider(
                                 minimum=0,
                                 maximum=1,
-                                label=i18n(
-                                    "输入源音量包络替换输出音量包络融合比例，越靠近1越使用输出包络"
-                                ),
+                                label=i18n("输入源音量包络替换输出音量包络融合比例，越靠近1越使用输出包络"),
                                 value=0.25,
                                 interactive=True,
                             )
                             protect0 = gr.Slider(
                                 minimum=0,
                                 maximum=0.5,
-                                label=i18n(
-                                    "保护清辅音和呼吸声，防止电音撕裂等artifact，拉满0.5不开启，调低加大保护力度但可能降低索引效果"
-                                ),
+                                label=i18n("保护清辅音和呼吸声，防止电音撕裂等artifact，拉满0.5不开启，调低加大保护力度但可能降低索引效果"),
                                 value=0.33,
                                 step=0.01,
                                 interactive=True,
@@ -580,9 +595,7 @@ with gr.Blocks(title="RVC WebUI") as app:
                             filter_radius0 = gr.Slider(
                                 minimum=0,
                                 maximum=7,
-                                label=i18n(
-                                    ">=3则使用对harvest音高识别的结果使用中值滤波，数值为滤波半径，使用可以削弱哑音"
-                                ),
+                                label=i18n(">=3则使用对harvest音高识别的结果使用中值滤波，数值为滤波半径，使用可以削弱哑音"),
                                 value=3,
                                 step=1,
                                 interactive=True,
@@ -595,9 +608,7 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 interactive=True,
                             )
                             f0_file = gr.File(
-                                label=i18n(
-                                    "F0曲线文件, 可选, 一行一个音高, 代替默认F0及升降调"
-                                ),
+                                label=i18n("F0曲线文件, 可选, 一行一个音高, 代替默认F0及升降调"),
                                 visible=False,
                             )
 
@@ -612,10 +623,7 @@ with gr.Blocks(title="RVC WebUI") as app:
                         but0 = gr.Button(i18n("转换"), variant="primary")
                         with gr.Row():
                             vc_output1 = gr.Textbox(label=i18n("输出信息"))
-                            vc_output2 = gr.Audio(
-                                label=i18n("输出音频(右下角三个点,点了可以下载)")
-                            )
-
+                            vc_output2 = gr.Audio(label=i18n("输出音频(右下角三个点,点了可以下载)"))
                         but0.click(
                             vc.vc_single,
                             [
@@ -758,7 +766,6 @@ with gr.Blocks(title="RVC WebUI") as app:
                             f0method1,
                             file_index3,
                             file_index4,
-                            # file_big_npy2,
                             index_rate2,
                             filter_radius1,
                             resample_sr1,

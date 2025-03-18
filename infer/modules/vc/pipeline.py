@@ -27,8 +27,8 @@ input_audio_path2wav = {}
 
 
 @lru_cache
-def cache_harvest_f0(audio_file, fs, f0max, f0min, frame_period):
-    audio = input_audio_path2wav[audio_file]
+def cache_harvest_f0(input_audio_path, fs, f0max, f0min, frame_period):
+    audio = input_audio_path2wav[input_audio_path]
     f0, t = pyworld.harvest(
         audio,
         fs=fs,
@@ -83,7 +83,7 @@ class Pipeline(object):
 
     def get_f0(
         self,
-        audio_file,
+        input_audio_path,
         x,
         p_len,
         f0_up_key,
@@ -114,8 +114,8 @@ class Pipeline(object):
                     f0, [[pad_size, p_len - len(f0) - pad_size]], mode="constant"
                 )
         elif f0_method == "harvest":
-            input_audio_path2wav[audio_file] = x.astype(np.double)
-            f0 = cache_harvest_f0(audio_file, self.sr, f0_max, f0_min, 10)
+            input_audio_path2wav[input_audio_path] = x.astype(np.double)
+            f0 = cache_harvest_f0(input_audio_path, self.sr, f0_max, f0_min, 10)
             if filter_radius > 2:
                 f0 = signal.medfilt(f0, 3)
         elif f0_method == "crepe":
@@ -284,7 +284,7 @@ class Pipeline(object):
         net_g,
         sid,
         audio,
-        audio_file,
+        input_audio_path,
         times,
         f0_up_key,
         f0_method,
@@ -352,7 +352,7 @@ class Pipeline(object):
         pitch, pitchf = None, None
         if if_f0 == 1:
             pitch, pitchf = self.get_f0(
-                audio_file,
+                input_audio_path,
                 audio_pad,
                 p_len,
                 f0_up_key,
