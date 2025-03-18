@@ -20,11 +20,7 @@ from infer.modules.vc.utils import *
 from fairseq.data.dictionary import Dictionary
 import torch
 
-def load_hubert_with_safe_globals(config):
-    safe_globals = {"fairseq.data.dictionary.Dictionary": Dictionary}
-    # Wrap the loading call in the safe_globals context manager.
-    with torch.serialization.safe_globals(safe_globals):
-        return load_hubert(config)
+torch.serialization.add_safe_globals([Dictionary])
 
 class VC:
     def __init__(self, config):
@@ -176,7 +172,7 @@ class VC:
             times = [0, 0, 0]
 
             if self.hubert_model is None:
-                self.hubert_model = load_hubert_with_safe_globals(self.config)
+                self.hubert_model = load_hubert(self.config)
 
             if file_index:
                 file_index = (
