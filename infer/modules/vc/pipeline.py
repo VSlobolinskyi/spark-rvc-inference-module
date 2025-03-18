@@ -97,6 +97,11 @@ class Pipeline(object):
         f0_max = 1100
         f0_mel_min = 1127 * np.log(1 + f0_min / 700)
         f0_mel_max = 1127 * np.log(1 + f0_max / 700)
+        print("input_audio_path:", input_audio_path, type(input_audio_path))
+        if x is not None:
+            print("x shape:", x.shape, "dtype:", x.dtype)
+        else:
+            print("x is None")
         if f0_method == "pm":
             f0 = (
                 parselmouth.Sound(x, self.sr)
