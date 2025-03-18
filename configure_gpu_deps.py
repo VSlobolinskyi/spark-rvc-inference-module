@@ -65,13 +65,15 @@ def process_lines(lines, target_gpu):
     return output_lines
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print("Usage: python configure_gpu_deps.py <pyproject.toml> <gpu_type>")
         print("  where <gpu_type> is either 'nvidia' or 'amd'")
         sys.exit(1)
 
-    toml_path = sys.argv[1]
-    gpu_type = sys.argv[2].lower()
+    gpu_type = sys.argv[1].lower()
+    toml_path = "pyproject.toml"
+    with open(toml_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
     if gpu_type not in {"nvidia", "amd"}:
         print("gpu_type must be either 'nvidia' or 'amd'")
         sys.exit(1)
