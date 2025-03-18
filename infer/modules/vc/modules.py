@@ -146,7 +146,7 @@ class VC:
     def vc_single(
         self,
         sid,
-        input_audio_path,
+        audio_file,
         f0_up_key,
         f0_file,
         f0_method,
@@ -158,11 +158,12 @@ class VC:
         rms_mix_rate,
         protect,
     ):
-        if input_audio_path is None:
+        if audio_file is None:
             return "You need to upload an audio", None
+
         f0_up_key = int(f0_up_key)
         try:
-            audio = load_audio(input_audio_path, 16000)
+            audio = load_audio(audio_file, 16000)
             audio_max = np.abs(audio).max() / 0.95
             if audio_max > 1:
                 audio /= audio_max
@@ -183,14 +184,14 @@ class VC:
             elif file_index2:
                 file_index = file_index2
             else:
-                file_index = ""  # 防止小白写错，自动帮他替换掉
+                file_index = ""  # Prevents potential mistakes by auto-replacing to an empty string
 
             audio_opt = self.pipeline.pipeline(
                 self.hubert_model,
                 self.net_g,
                 sid,
                 audio,
-                input_audio_path,
+                audio_file,
                 times,
                 f0_up_key,
                 f0_method,

@@ -607,11 +607,6 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 outputs=[sid0, file_index2],
                                 api_name="infer_refresh",
                             )
-                            # file_big_npy1 = gr.Textbox(
-                            #     label=i18n("特征文件路径"),
-                            #     value="E:\\codes\py39\\vits_vc_gpu_train\\logs\\mi-test-1key\\total_fea.npy",
-                            #     interactive=True,
-                            # )
                 with gr.Group():
                     with gr.Column():
                         but0 = gr.Button(i18n("转换"), variant="primary")
@@ -631,7 +626,6 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 f0method0,
                                 file_index1,
                                 file_index2,
-                                # file_big_npy1,
                                 index_rate1,
                                 filter_radius0,
                                 resample_sr0,
