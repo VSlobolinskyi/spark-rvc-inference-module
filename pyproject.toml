@@ -1,38 +1,49 @@
 [tool.poetry]
-name = "rvc-beta"
+name = "spark-rvc-inference-module"
 version = "0.1.0"
-description = ""
-authors = ["lj1995"]
-license = "MIT"
+description = "Spark TTS with RVC inference module"
+authors = ["vitalii.slobolinskyi"]
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.9"
-torch = "^2.4.1"
-torchaudio = "2.4.1"
-Cython = "^3.0.11"
-gradio = "3.34.0"
+python = ">=3.11,<3.12"
+
+# Platform-specific installations for torch and torchaudio:
+torch = [
+  { url = "https://download.pytorch.org/whl/cu118/torch-2.1.1%2Bcu118-cp311-cp311-win_amd64.whl#sha256=d99be44487d3ed0f7e6ef5d6689a37fb4a2f2821a9e7b59e7e04002a876a667a", markers = "sys_platform == 'win32'" },
+  { url = "https://download.pytorch.org/whl/cu118/torch-2.1.1%2Bcu118-cp311-cp311-linux_x86_64.whl#sha256=f3c0ba02b50d0021ff26f030e22d4c45965537cf91f322e52a65b8c58396f81c", markers = "sys_platform == 'linux'" }
+]
+
+torchaudio = [
+  { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.1.1%2Bcu118-cp311-cp311-win_amd64.whl#sha256=79b5afa556063be18de4a1964339242301fe04e782e1030a22695257dd9afbd2", markers = "sys_platform == 'win32'" },
+  { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.1.1%2Bcu118-cp311-cp311-linux_x86_64.whl#sha256=2b077639f240176bb27e964e2e9b3a5c2a8d560a3a7bc1ffd0a024e81f2e10b4", markers = "sys_platform == 'linux'" }
+]
+
+aria2 = "*"
+joblib = ">=1.1.0"
+numba = ">=0.56.4"
+numpy = "==1.23.5"
+scipy = "*"
+librosa = "==0.9.1"
+llvmlite = "==0.42.0"
+fairseq = "==0.12.2"
+faiss-cpu = "==1.7.3"
+gradio = "==3.34.0"
+Cython = "*"
 pydub = ">=0.25.1"
 soundfile = ">=0.12.1"
 ffmpeg-python = ">=0.2.0"
-tensorboardX = "^2.6.2.2"
-fairseq = "0.12.2"
-faiss-cpu = "1.7.3"
+tensorboardX = "*"
 Jinja2 = ">=3.1.2"
-json5 = "^0.9.25"
-librosa = "0.9.1"
-llvmlite = "0.39.0"
-Markdown = "^3.6"
+json5 = "*"
+Markdown = "*"
 matplotlib = ">=3.7.0"
 matplotlib-inline = ">=0.1.3"
-numba = "0.56.4"
-numpy = "1.23.5"
-scipy = "1.13.1"
 praat-parselmouth = ">=0.4.2"
 Pillow = ">=9.1.1"
-pyworld = "0.3.2"
 resampy = ">=0.4.2"
-scikit-learn = "^1.5.1"
-tensorboard = "^2.17.0"
+scikit-learn = "*"
+tensorboard = "*"
 tqdm = ">=4.63.1"
 tornado = ">=6.1"
 Werkzeug = ">=2.2.3"
@@ -44,22 +55,22 @@ pyasn1 = ">=0.4.8"
 pyasn1-modules = ">=0.2.8"
 fsspec = ">=2022.11.0"
 absl-py = ">=1.2.0"
-audioread = "^3.0.1"
+audioread = "*"
 uvicorn = ">=0.21.1"
 colorama = ">=0.4.5"
-torchcrepe = "0.0.20"
+pyworld = "==0.3.2"
+httpx = "*"
+onnxruntime = { version = "*", markers = "sys_platform == 'darwin'" }
+onnxruntime-gpu = { version = "*", markers = "sys_platform != 'darwin'" }
+torchcrepe = "==0.0.20"
+fastapi = "==0.88"
+torchfcpe = "*"
+ffmpy = "==0.3.1"
 python-dotenv = ">=1.0.0"
-av = "^12.3.0"
-joblib = ">=1.1.0"
-httpx = "^0.27.0"
-onnxruntime-gpu = "^1.18.1"
-fastapi = "0.88"
-torchfcpe = "^0.0.4"
-ffmpy = "0.3.1"
-torchvision = "0.19.1"
-freesimplegui = "^5.2.0"
-torch-directml = "^0.2.5.dev240914"
-[tool.poetry.dev-dependencies]
+av = "*"
+
+[tool.poetry.group.dev.dependencies]
+# (Add any development dependencies here)
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
