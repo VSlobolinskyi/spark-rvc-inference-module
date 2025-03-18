@@ -19,15 +19,14 @@ torchaudio = [
   { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.1.1%2Bcu118-cp311-cp311-linux_x86_64.whl#sha256=2b077639f240176bb27e964e2e9b3a5c2a8d560a3a7bc1ffd0a024e81f2e10b4", markers = "sys_platform == 'linux'" }
 ]
 
-aria2 = "*"
 joblib = ">=1.1.0"
-numba = ">=0.56.4"
-numpy = "==1.23.5"
+numba = "*"
+numpy = "*"
 scipy = "*"
-librosa = "==0.9.1"
-llvmlite = "==0.42.0"
-fairseq = "==0.12.2"
-faiss-cpu = "==1.7.3"
+librosa = "==0.10.2"
+llvmlite = "*"
+fairseq = { git = "https://github.com/One-sixth/fairseq.git" }
+faiss-cpu = "*"
 gradio = "==3.34.0"
 Cython = "*"
 pydub = ">=0.25.1"
@@ -62,7 +61,7 @@ pyworld = "==0.3.2"
 httpx = "*"
 onnxruntime = { version = "*", markers = "sys_platform == 'darwin'" }
 onnxruntime-gpu = { version = "*", markers = "sys_platform != 'darwin'" }
-torchcrepe = "==0.0.20"
+torchcrepe = "==0.0.23"
 fastapi = "==0.88"
 torchfcpe = "*"
 ffmpy = "==0.3.1"
@@ -70,7 +69,7 @@ python-dotenv = ">=1.0.0"
 av = "*"
 
 [tool.poetry.group.dev.dependencies]
-# (Add any development dependencies here)
+# Add any development dependencies here
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
