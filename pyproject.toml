@@ -6,19 +6,9 @@ authors = ["lj1995"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-
-# Platform-specific installations for torch and torchaudio:
-torch = [
-  { url = "https://download.pytorch.org/whl/cu118/torch-2.1.1%2Bcu118-cp311-cp311-win_amd64.whl#sha256=d99be44487d3ed0f7e6ef5d6689a37fb4a2f2821a9e7b59e7e04002a876a667a", markers = "sys_platform == 'win32'" },
-  { url = "https://download.pytorch.org/whl/cu118/torch-2.1.1%2Bcu118-cp311-cp311-linux_x86_64.whl#sha256=f3c0ba02b50d0021ff26f030e22d4c45965537cf91f322e52a65b8c58396f81c", markers = "sys_platform == 'linux'" }
-]
-
-torchaudio = [
-  { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.1.1%2Bcu118-cp311-cp311-win_amd64.whl#sha256=79b5afa556063be18de4a1964339242301fe04e782e1030a22695257dd9afbd2", markers = "sys_platform == 'win32'" },
-  { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.1.1%2Bcu118-cp311-cp311-linux_x86_64.whl#sha256=2b077639f240176bb27e964e2e9b3a5c2a8d560a3a7bc1ffd0a024e81f2e10b4", markers = "sys_platform == 'linux'" }
-]
-
 python = "^3.9"
+torch = "^2.4.1"
+torchaudio = "2.4.1"
 Cython = "^3.0.11"
 gradio = "3.34.0"
 pydub = ">=0.25.1"
@@ -66,7 +56,10 @@ onnxruntime-gpu = "^1.18.1"
 fastapi = "0.88"
 torchfcpe = "^0.0.4"
 ffmpy = "0.3.1"
-[tool.poetry.group.dev.dependencies]
+torchvision = "0.19.1"
+freesimplegui = "^5.2.0"
+torch-directml = "^0.2.5.dev240914"
+[tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
