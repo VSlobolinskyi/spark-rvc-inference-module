@@ -4,20 +4,20 @@ import re
 
 def process_lines(lines, target_gpu):
     """
-    Process the lines of a file and uncomment the configuration block corresponding
-    to target_gpu ('nvidia' or 'amd') while leaving the other block commented.
+    Process lines from the pyproject.toml file.
+    In the GPU configuration blocks, uncomment lines if they belong to the target block,
+    and ensure lines in the non-target block are commented.
     """
     output_lines = []
     current_block = None  # None, "nvidia", or "amd"
     
-    # Define regexes to detect the markers
+    # Regex patterns for block markers and separator lines.
     nvidia_marker = re.compile(r'---\s*NVIDIA GPU configuration\s*---', re.IGNORECASE)
     amd_marker = re.compile(r'---\s*AMD GPU configuration\s*---', re.IGNORECASE)
-    separator = re.compile(r'^#\s*-{5,}')  # a commented separator line (at least 5 dashes)
+    separator = re.compile(r'^#\s*-{5,}')  # a commented separator line
     
     for line in lines:
-        stripped = line.lstrip()
-        # Check for block start markers (they remain unchanged)
+        # Check if this line marks the beginning of a GPU config block.
         if nvidia_marker.search(line):
             current_block = "nvidia"
             output_lines.append(line)
@@ -26,24 +26,41 @@ def process_lines(lines, target_gpu):
             current_block = "amd"
             output_lines.append(line)
             continue
-        # End of block when encountering a separator line
+        
+        # If we hit a separator line, then end the current block.
         if separator.match(line):
             current_block = None
             output_lines.append(line)
             continue
-
-        # If we're in a GPU configuration block and the line is commented, process it
-        if current_block is not None and stripped.startswith("#"):
-            # Remove the first '#' and any following space if we are in the target block.
-            if current_block == target_gpu:
-                # Uncomment by removing the first '#' (preserve indentation)
-                # Using regex to remove a leading '#' with possible spaces
-                uncommented = re.sub(r'^(?P<indent>\s*)#\s?', r'\g<indent>', line)
-                output_lines.append(uncommented)
-            else:
-                # Leave the line commented for the non-target block
+        
+        # Process lines within a GPU configuration block.
+        if current_block is not None:
+            # Remove newline to check content.
+            stripped = line.rstrip("\n")
+            if stripped.strip() == "":
                 output_lines.append(line)
+                continue
+
+            # If this block is the target, ensure the line is uncommented.
+            if current_block == target_gpu:
+                # If the line is already uncommented, leave it.
+                if not stripped.lstrip().startswith("#"):
+                    output_lines.append(line)
+                else:
+                    # Remove the first occurrence of '#' with following space.
+                    uncommented = re.sub(r'^(\s*)#\s?', r'\1', line)
+                    output_lines.append(uncommented)
+            else:
+                # For the non-target block, ensure the line is commented.
+                if stripped.lstrip().startswith("#"):
+                    # Already commented, leave as-is.
+                    output_lines.append(line)
+                else:
+                    # Add a '#' preserving the original indentation.
+                    leading_space = re.match(r'^(\s*)', line).group(1)
+                    output_lines.append(f"{leading_space}# {line.lstrip()}")
         else:
+            # Outside of any GPU config block, just add the line.
             output_lines.append(line)
     return output_lines
 
