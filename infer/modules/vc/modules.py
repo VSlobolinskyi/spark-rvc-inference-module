@@ -17,7 +17,8 @@ from infer.lib.infer_pack.models import (
 )
 from infer.modules.vc.pipeline import Pipeline
 from infer.modules.vc.utils import *
-
+from fairseq.data.dictionary import Dictionary
+import torch
 
 class VC:
     def __init__(self, config):
@@ -169,7 +170,8 @@ class VC:
             times = [0, 0, 0]
 
             if self.hubert_model is None:
-                self.hubert_model = load_hubert(self.config)
+                with torch.serialization.safe_globals({"fairseq.data.dictionary.Dictionary": Dictionary}):
+                    self.hubert_model = load_hubert(self.config)
 
             if file_index:
                 file_index = (
