@@ -52,6 +52,9 @@ torchaudio = "2.4.1"
 torch-directml = "^0.2.5.dev240914"
 # ---------------------------------------------------------------------------
 
+# Depndenciees for temp_tools
+autoflake = "^2.3.1"
+
 [tool.poetry.group.dev.dependencies]
 # Add any development dependencies here
 

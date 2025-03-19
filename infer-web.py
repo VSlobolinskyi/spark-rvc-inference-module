@@ -7,17 +7,11 @@ sys.path.append(now_dir)
 load_dotenv()
 from infer.modules.vc.modules import VC
 from configs.config import Config
-from sklearn.cluster import MiniBatchKMeans
-import torch, platform
-import numpy as np
+import torch
 import gradio as gr
-import faiss
 import fairseq
-import pathlib
-import json
 from time import sleep
 from subprocess import Popen
-from random import shuffle
 import warnings
 import traceback
 import threading

@@ -10,4 +10,3 @@ torchgate imports all the functions from PyTorch, and in addition provides:
 
 """
 
-from .torchgate import TorchGate
