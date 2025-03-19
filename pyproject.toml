@@ -49,7 +49,7 @@ uvicorn = ">=0.21.1"
 colorama = ">=0.4.5"
 pyworld = "==0.3.2"
 httpx = "*"
-  onnxruntime = { version = "*", markers = "sys_platform == 'darwin'" }
+onnxruntime = { version = "*", markers = "sys_platform == 'darwin'" }
 onnxruntime-gpu = { version = "*", markers = "sys_platform != 'darwin'" }
 torchcrepe = "==0.0.23"
 fastapi = "==0.88"
