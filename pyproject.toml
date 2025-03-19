@@ -10,6 +10,10 @@ python = ">=3.11,<3.12"
 
 # Common dependencies (non GPU-specific):
 fairseq = { git = "https://github.com/One-sixth/fairseq.git" }
+joblib = ">=1.1.0"
+numba = "*"
+llvmlite = "*"
+Cython = "*"
 numpy = "*"
 scipy = "*"
 librosa = "==0.10.2"
