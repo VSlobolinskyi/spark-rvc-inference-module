@@ -1,15 +1,17 @@
 import os
 import json
 
+
 def load_mapping(mapping_path):
     """
     Load the mapping JSON file containing key-value pairs.
     """
-    with open(mapping_path, 'r', encoding='utf-8') as f:
+    with open(mapping_path, "r", encoding="utf-8") as f:
         mapping = json.load(f)
     # Sort mapping items by length of the original text (key) in descending order
     sorted_mapping = sorted(mapping.items(), key=lambda kv: len(kv[0]), reverse=True)
     return sorted_mapping
+
 
 def process_file(file_path, sorted_mapping):
     """
@@ -17,7 +19,7 @@ def process_file(file_path, sorted_mapping):
     if changes were made.
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
     except UnicodeDecodeError:
         # Skip binary files or files that can't be decoded as UTF-8
@@ -31,9 +33,10 @@ def process_file(file_path, sorted_mapping):
             new_content = new_content.replace(original_text, translated_text)
 
     if new_content != content:
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)
         print(f"Updated: {file_path}")
+
 
 def process_directory(root_dir, sorted_mapping, mapping_file_path):
     """
@@ -47,11 +50,12 @@ def process_directory(root_dir, sorted_mapping, mapping_file_path):
                 continue
             process_file(file_path, sorted_mapping)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Assume the script is run from the project root.
     project_root = os.getcwd()
-    mapping_file_path = os.path.join(project_root, 'i18n', 'locale', 'en_US.json')
-    
+    mapping_file_path = os.path.join(project_root, "i18n", "locale", "en_US.json")
+
     if not os.path.exists(mapping_file_path):
         print(f"Mapping file not found: {mapping_file_path}")
     else:

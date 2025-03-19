@@ -2,6 +2,7 @@ import os
 import ast
 from collections import defaultdict
 
+
 class CodeAnalyzer(ast.NodeVisitor):
     def __init__(self):
         # Stores plain "import module" names.
@@ -45,12 +46,13 @@ class CodeAnalyzer(ast.NodeVisitor):
             return node.attr
         return None
 
+
 def process_file(file_path):
     """
     Parse the Python file at file_path and return an analysis of its imports and function calls.
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             file_content = f.read()
         tree = ast.parse(file_content, filename=file_path)
     except Exception as e:
@@ -60,10 +62,13 @@ def process_file(file_path):
     analyzer = CodeAnalyzer()
     analyzer.visit(tree)
     return {
-        'imports': sorted(analyzer.imports),
-        'from_imports': {module: sorted(names) for module, names in analyzer.from_imports.items()},
-        'function_calls': sorted(analyzer.function_calls)
+        "imports": sorted(analyzer.imports),
+        "from_imports": {
+            module: sorted(names) for module, names in analyzer.from_imports.items()
+        },
+        "function_calls": sorted(analyzer.function_calls),
     }
+
 
 def process_directory(root_dir):
     """
@@ -79,26 +84,28 @@ def process_directory(root_dir):
                     summary[file_path] = analysis
     return summary
 
+
 def write_summary(summary, output_file):
     """
     Write the collected analysis to a text file in a human-readable format.
     """
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         for file, data in summary.items():
             f.write(f"File: {file}\n")
             f.write("  Imports:\n")
-            for imp in data['imports']:
+            for imp in data["imports"]:
                 f.write(f"    - {imp}\n")
             f.write("  From Imports:\n")
-            for module, names in data['from_imports'].items():
+            for module, names in data["from_imports"].items():
                 f.write(f"    - {module}: {', '.join(names)}\n")
             f.write("  Function Calls:\n")
-            for call in data['function_calls']:
+            for call in data["function_calls"]:
                 f.write(f"    - {call}\n")
             f.write("\n")
     print(f"Analysis written to {output_file}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     project_root = os.getcwd()  # Assumes the script is placed at your project root.
     analysis_summary = process_directory(project_root)
     output_summary_file = "temp_tools/used_dependencies.txt"

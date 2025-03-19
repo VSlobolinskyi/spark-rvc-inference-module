@@ -5,6 +5,7 @@ from pathlib import Path
 import tempfile
 import shutil
 
+
 def download_file(url: str, local_path: Path):
     """Download a file from a URL to a local path."""
     if local_path.exists():
@@ -18,6 +19,7 @@ def download_file(url: str, local_path: Path):
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
     print(f"[DONE] Downloaded {local_path}")
+
 
 def extract_and_move(zip_path: Path, logs_dir: Path, weights_dir: Path):
     """Extract a zip file and move .index files to logs and .pth files to assets/weights."""
@@ -40,6 +42,7 @@ def extract_and_move(zip_path: Path, logs_dir: Path, weights_dir: Path):
                     print(f"[MOVE] Moving {extracted_file} to {dest}")
                     shutil.move(str(extracted_file), str(dest))
     print("[CLEANUP] Extraction complete.")
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -67,6 +70,7 @@ def main():
         print(f"[DELETE] Removing {zip_path}")
         zip_path.unlink()
     print("[COMPLETE] Model download and extraction complete.")
+
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,7 @@
 import sys
 import re
 
+
 def process_lines(lines, target_gpu):
     """
     Process lines from the pyproject.toml file.
@@ -10,12 +11,12 @@ def process_lines(lines, target_gpu):
     """
     output_lines = []
     current_block = None  # None, "nvidia", or "amd"
-    
+
     # Regex patterns for block markers and separator lines.
-    nvidia_marker = re.compile(r'---\s*NVIDIA GPU configuration\s*---', re.IGNORECASE)
-    amd_marker = re.compile(r'---\s*AMD GPU configuration\s*---', re.IGNORECASE)
-    separator = re.compile(r'^#\s*-{5,}')  # a commented separator line
-    
+    nvidia_marker = re.compile(r"---\s*NVIDIA GPU configuration\s*---", re.IGNORECASE)
+    amd_marker = re.compile(r"---\s*AMD GPU configuration\s*---", re.IGNORECASE)
+    separator = re.compile(r"^#\s*-{5,}")  # a commented separator line
+
     for line in lines:
         # Check if this line marks the beginning of a GPU config block.
         if nvidia_marker.search(line):
@@ -26,13 +27,13 @@ def process_lines(lines, target_gpu):
             current_block = "amd"
             output_lines.append(line)
             continue
-        
+
         # If we hit a separator line, then end the current block.
         if separator.match(line):
             current_block = None
             output_lines.append(line)
             continue
-        
+
         # Process lines within a GPU configuration block.
         if current_block is not None:
             # Remove newline to check content.
@@ -48,7 +49,7 @@ def process_lines(lines, target_gpu):
                     output_lines.append(line)
                 else:
                     # Remove the first occurrence of '#' with following space.
-                    uncommented = re.sub(r'^(\s*)#\s?', r'\1', line)
+                    uncommented = re.sub(r"^(\s*)#\s?", r"\1", line)
                     output_lines.append(uncommented)
             else:
                 # For the non-target block, ensure the line is commented.
@@ -57,12 +58,13 @@ def process_lines(lines, target_gpu):
                     output_lines.append(line)
                 else:
                     # Add a '#' preserving the original indentation.
-                    leading_space = re.match(r'^(\s*)', line).group(1)
+                    leading_space = re.match(r"^(\s*)", line).group(1)
                     output_lines.append(f"{leading_space}# {line.lstrip()}")
         else:
             # Outside of any GPU config block, just add the line.
             output_lines.append(line)
     return output_lines
+
 
 def main():
     if len(sys.argv) != 2:
@@ -87,6 +89,7 @@ def main():
         f.writelines(new_lines)
 
     print(f"Updated {toml_path} for {gpu_type.upper()} GPU configuration.")
+
 
 if __name__ == "__main__":
     main()

@@ -1,9 +1,17 @@
 [tool.poetry]
 name = "spark-rvc-inference-module"
 version = "0.1.0"
-description = "Spark TTS with RVC inference module"
+description = "Spark TTS with RVC inference module. A unification of the RVC inference module and Spark TTS projects."
 authors = ["vitalii.slobolinskyi"]
-package-mode = false
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/VSlobolinskyi/spark-rvc-inference-module"
+repository = "https://github.com/VSlobolinskyi/spark-rvc-inference-module"
+
+[[tool.poetry.packages]]
+include = "rvc_ui"
+from = "modules"
+
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
@@ -60,7 +68,13 @@ torch-directml = "^0.2.5.dev240914"
 autoflake = "^2.3.1"
 
 [tool.poetry.group.dev.dependencies]
-# Add any development dependencies here
+black = "^25.1.0"
+pytest = "^7.0"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

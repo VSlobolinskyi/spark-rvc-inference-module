@@ -59,7 +59,8 @@ with app:
             )
             vc_input3 = gr.Audio(label="上传音频（长度小于90秒）")
             vc_transform0 = gr.Number(
-                label="Transpose (integer, number of semitones, raise by an octave: 12, lower by an octave: -12):", value=0
+                label="Transpose (integer, number of semitones, raise by an octave: 12, lower by an octave: -12):",
+                value=0,
             )
             f0method0 = gr.Radio(
                 label="选择音高Extract算法,输入歌声可用pm提速,harvest低音好但巨慢无比,crepe效果好但吃GPU",
@@ -122,7 +123,9 @@ with app:
             )
             but0 = gr.Button("Convert", variant="primary")
             vc_output1 = gr.Textbox(label="Output information")
-            vc_output2 = gr.Audio(label="Export audio (click on the three dots in the lower right corner to download)")
+            vc_output2 = gr.Audio(
+                label="Export audio (click on the three dots in the lower right corner to download)"
+            )
             but0.click(
                 vc.vc_single,
                 [

@@ -1,0 +1,403 @@
+├── .env
+├── .gitignore
+├── .vscode
+│   └── settings.json
+├── assets
+│   ├── hubert
+│   │   ├── .gitignore
+│   │   ├── hubert_base.pt
+│   │   └── hubert_inputs.pth
+│   ├── indices
+│   │   └── .gitignore
+│   ├── pretrained
+│   │   ├── .gitignore
+│   │   ├── D32k.pth
+│   │   ├── D40k.pth
+│   │   ├── D48k.pth
+│   │   ├── f0D32k.pth
+│   │   ├── f0D40k.pth
+│   │   ├── f0D48k.pth
+│   │   ├── f0G32k.pth
+│   │   ├── f0G40k.pth
+│   │   ├── f0G48k.pth
+│   │   ├── G32k.pth
+│   │   ├── G40k.pth
+│   │   └── G48k.pth
+│   ├── pretrained_v2
+│   │   ├── .gitignore
+│   │   ├── D32k.pth
+│   │   ├── D40k.pth
+│   │   ├── D48k.pth
+│   │   ├── f0D32k.pth
+│   │   ├── f0D40k.pth
+│   │   ├── f0D48k.pth
+│   │   ├── f0G32k.pth
+│   │   ├── f0G40k.pth
+│   │   ├── f0G48k.pth
+│   │   ├── G32k.pth
+│   │   ├── G40k.pth
+│   │   └── G48k.pth
+│   ├── rmvpe
+│   │   ├── .gitignore
+│   │   ├── rmvpe.onnx
+│   │   ├── rmvpe.pt
+│   │   └── rmvpe_inputs.pth
+│   ├── Synthesizer_inputs.pth
+│   ├── uvr5_weights
+│   │   ├── .gitignore
+│   │   ├── HP2-%E4%BA%BA%E5%A3%B0vocals%2B%E9%9D%9E%E4%BA%BA%E5%A3%B0instrumentals.pth
+│   │   ├── HP2_all_vocals.pth
+│   │   ├── HP3_all_vocals.pth
+│   │   ├── HP5-%E4%B8%BB%E6%97%8B%E5%BE%8B%E4%BA%BA%E5%A3%B0vocals%2B%E5%85%B6%E4%BB%96instrumentals.pth
+│   │   ├── HP5_only_main_vocal.pth
+│   │   ├── onnx_dereverb_By_FoxJoy
+│   │   │   └── vocals.onnx
+│   │   ├── VR-DeEchoAggressive.pth
+│   │   ├── VR-DeEchoDeReverb.pth
+│   │   └── VR-DeEchoNormal.pth
+│   └── weights
+│       ├── .gitignore
+│       └── SilverWolf_e300_s6600.pth
+├── configs
+│   ├── config.json
+│   ├── config.py
+│   ├── inuse
+│   │   ├── .gitignore
+│   │   ├── v1
+│   │   │   ├── .gitignore
+│   │   │   ├── 32k.json
+│   │   │   ├── 40k.json
+│   │   │   └── 48k.json
+│   │   └── v2
+│   │       ├── .gitignore
+│   │       ├── 32k.json
+│   │       └── 48k.json
+│   ├── v1
+│   │   ├── 32k.json
+│   │   ├── 40k.json
+│   │   └── 48k.json
+│   ├── v2
+│   │   ├── 32k.json
+│   │   └── 48k.json
+│   └── __pycache__
+│       └── config.cpython-311.pyc
+├── configure_gpu_deps.py
+├── ffmpeg.exe
+├── ffprobe.exe
+├── generate-structure.js
+├── infer
+│   ├── lib
+│   │   ├── audio.py
+│   │   ├── infer_pack
+│   │   │   ├── attentions.py
+│   │   │   ├── attentions_onnx.py
+│   │   │   ├── commons.py
+│   │   │   ├── models.py
+│   │   │   ├── models_onnx.py
+│   │   │   ├── modules
+│   │   │   │   └── F0Predictor
+│   │   │   │       ├── DioF0Predictor.py
+│   │   │   │       ├── F0Predictor.py
+│   │   │   │       ├── HarvestF0Predictor.py
+│   │   │   │       ├── PMF0Predictor.py
+│   │   │   │       └── __init__.py
+│   │   │   ├── modules.py
+│   │   │   ├── onnx_inference.py
+│   │   │   ├── transforms.py
+│   │   │   └── __pycache__
+│   │   │       ├── attentions.cpython-311.pyc
+│   │   │       ├── commons.cpython-311.pyc
+│   │   │       ├── models.cpython-311.pyc
+│   │   │       ├── modules.cpython-311.pyc
+│   │   │       └── transforms.cpython-311.pyc
+│   │   ├── jit
+│   │   │   ├── get_hubert.py
+│   │   │   ├── get_rmvpe.py
+│   │   │   ├── get_synthesizer.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   │       └── __init__.cpython-311.pyc
+│   │   ├── rmvpe.py
+│   │   ├── rtrvc.py
+│   │   ├── slicer2.py
+│   │   ├── uvr5_pack
+│   │   │   ├── lib_v5
+│   │   │   │   ├── dataset.py
+│   │   │   │   ├── layers.py
+│   │   │   │   ├── layers_123812KB .py
+│   │   │   │   ├── layers_123821KB.py
+│   │   │   │   ├── layers_33966KB.py
+│   │   │   │   ├── layers_537227KB.py
+│   │   │   │   ├── layers_537238KB.py
+│   │   │   │   ├── layers_new.py
+│   │   │   │   ├── modelparams
+│   │   │   │   │   ├── 1band_sr16000_hl512.json
+│   │   │   │   │   ├── 1band_sr32000_hl512.json
+│   │   │   │   │   ├── 1band_sr33075_hl384.json
+│   │   │   │   │   ├── 1band_sr44100_hl1024.json
+│   │   │   │   │   ├── 1band_sr44100_hl256.json
+│   │   │   │   │   ├── 1band_sr44100_hl512.json
+│   │   │   │   │   ├── 1band_sr44100_hl512_cut.json
+│   │   │   │   │   ├── 2band_32000.json
+│   │   │   │   │   ├── 2band_44100_lofi.json
+│   │   │   │   │   ├── 2band_48000.json
+│   │   │   │   │   ├── 3band_44100.json
+│   │   │   │   │   ├── 3band_44100_mid.json
+│   │   │   │   │   ├── 3band_44100_msb2.json
+│   │   │   │   │   ├── 4band_44100.json
+│   │   │   │   │   ├── 4band_44100_mid.json
+│   │   │   │   │   ├── 4band_44100_msb.json
+│   │   │   │   │   ├── 4band_44100_msb2.json
+│   │   │   │   │   ├── 4band_44100_reverse.json
+│   │   │   │   │   ├── 4band_44100_sw.json
+│   │   │   │   │   ├── 4band_v2.json
+│   │   │   │   │   ├── 4band_v2_sn.json
+│   │   │   │   │   ├── 4band_v3.json
+│   │   │   │   │   └── ensemble.json
+│   │   │   │   ├── model_param_init.py
+│   │   │   │   ├── nets.py
+│   │   │   │   ├── nets_123812KB.py
+│   │   │   │   ├── nets_123821KB.py
+│   │   │   │   ├── nets_33966KB.py
+│   │   │   │   ├── nets_537227KB.py
+│   │   │   │   ├── nets_537238KB.py
+│   │   │   │   ├── nets_61968KB.py
+│   │   │   │   ├── nets_new.py
+│   │   │   │   └── spec_utils.py
+│   │   │   ├── name_params.json
+│   │   │   └── utils.py
+│   │   └── __pycache__
+│   │       ├── audio.cpython-311.pyc
+│   │       └── rmvpe.cpython-311.pyc
+│   └── modules
+│       ├── ipex
+│       │   ├── attention.py
+│       │   ├── gradscaler.py
+│       │   ├── hijacks.py
+│       │   └── __init__.py
+│       ├── onnx
+│       │   └── export.py
+│       ├── train
+│       │   ├── extract
+│       │   │   ├── extract_f0_print.py
+│       │   │   ├── extract_f0_rmvpe.py
+│       │   │   └── extract_f0_rmvpe_dml.py
+│       │   ├── extract_feature_print.py
+│       │   ├── preprocess.py
+│       │   └── train.py
+│       ├── uvr5
+│       │   ├── mdxnet.py
+│       │   └── vr.py
+│       └── vc
+│           ├── modules.py
+│           ├── pipeline.py
+│           ├── utils.py
+│           ├── __init__.py
+│           └── __pycache__
+│               ├── modules.cpython-311.pyc
+│               ├── pipeline.cpython-311.pyc
+│               ├── utils.cpython-311.pyc
+│               └── __init__.cpython-311.pyc
+├── infer-web.py
+├── LICENSE
+├── logs
+│   ├── added_IVF611_Flat_nprobe_1_SilverWolf_v2.index
+│   └── mute
+│       ├── 0_gt_wavs
+│       │   ├── mute32k.wav
+│       │   ├── mute40k.wav
+│       │   └── mute48k.wav
+│       ├── 1_16k_wavs
+│       │   └── mute.wav
+│       ├── 2a_f0
+│       │   └── mute.wav.npy
+│       ├── 2b-f0nsf
+│       │   └── mute.wav.npy
+│       ├── 3_feature256
+│       │   └── mute.npy
+│       └── 3_feature768
+│           └── mute.npy
+├── modules
+│   ├── rvc_ui
+│   │   ├── initialization.py
+│   │   ├── main.py
+│   │   ├── utils.py
+│   │   └── __init__.py
+│   └── spark_ui
+│       ├── main.py
+│       └── __init__.py
+├── poetry.lock
+├── pyproject.toml
+├── README.md
+├── spark
+│   ├── cli
+│   │   ├── inference.py
+│   │   ├── spark.sparktts.py
+│   │   └── __pycache__
+│   │       ├── spark.sparktts.cpython-311.pyc
+│   │       └── spark.sparktts.cpython-312.pyc
+│   ├── LICENSE
+│   ├── pretrained_models
+│   │   └── Spark-TTS-0.5B
+│   │       ├── .gitattributes
+│   │       ├── BiCodec
+│   │       │   ├── config.yaml
+│   │       │   └── model.safetensors
+│   │       ├── config.yaml
+│   │       ├── LLM
+│   │       │   ├── added_tokens.json
+│   │       │   ├── config.json
+│   │       │   ├── merges.txt
+│   │       │   ├── model.safetensors
+│   │       │   ├── special_tokens_map.json
+│   │       │   ├── tokenizer.json
+│   │       │   ├── tokenizer_config.json
+│   │       │   └── vocab.json
+│   │       ├── README.md
+│   │       ├── src
+│   │       │   ├── figures
+│   │       │   │   ├── gradio_control.png
+│   │       │   │   ├── gradio_TTS.png
+│   │       │   │   ├── infer_control.png
+│   │       │   │   └── infer_voice_cloning.png
+│   │       │   └── logo
+│   │       │       ├── HKUST.jpg
+│   │       │       ├── mobvoi.jpg
+│   │       │       ├── mobvoi.png
+│   │       │       ├── NPU.jpg
+│   │       │       ├── NTU.jpg
+│   │       │       ├── SJU.jpg
+│   │       │       ├── SparkAudio.jpg
+│   │       │       ├── SparkAudio2.jpg
+│   │       │       ├── spark.sparktts.jpg
+│   │       │       └── spark.sparktts.png
+│   │       └── wav2vec2-large-xlsr-53
+│   │           ├── config.json
+│   │           ├── preprocessor_config.json
+│   │           ├── pytorch_model.bin
+│   │           └── README.md
+│   ├── runtime
+│   │   └── triton_trtllm
+│   │       ├── client_grpc.py
+│   │       ├── client_http.py
+│   │       ├── model_repo
+│   │       │   ├── audio_tokenizer
+│   │       │   │   ├── 1
+│   │       │   │   │   └── model.py
+│   │       │   │   └── config.pbtxt
+│   │       │   ├── spark_tts
+│   │       │   │   ├── 1
+│   │       │   │   │   └── model.py
+│   │       │   │   └── config.pbtxt
+│   │       │   ├── tensorrt_llm
+│   │       │   │   ├── 1
+│   │       │   │   │   └── .gitkeep
+│   │       │   │   └── config.pbtxt
+│   │       │   └── vocoder
+│   │       │       ├── 1
+│   │       │       │   └── model.py
+│   │       │       └── config.pbtxt
+│   │       ├── README.md
+│   │       └── scripts
+│   │           ├── convert_checkpoint.py
+│   │           └── fill_template.py
+│   └── sparktts
+│       ├── models
+│       │   ├── audio_tokenizer.py
+│       │   ├── bicodec.py
+│       │   └── __pycache__
+│       │       ├── audio_tokenizer.cpython-311.pyc
+│       │       ├── audio_tokenizer.cpython-312.pyc
+│       │       ├── bicodec.cpython-311.pyc
+│       │       └── bicodec.cpython-312.pyc
+│       ├── modules
+│       │   ├── blocks
+│       │   │   ├── layers.py
+│       │   │   ├── samper.py
+│       │   │   ├── vocos.py
+│       │   │   └── __pycache__
+│       │   │       ├── layers.cpython-311.pyc
+│       │   │       ├── layers.cpython-312.pyc
+│       │   │       ├── samper.cpython-311.pyc
+│       │   │       ├── samper.cpython-312.pyc
+│       │   │       ├── vocos.cpython-311.pyc
+│       │   │       └── vocos.cpython-312.pyc
+│       │   ├── encoder_decoder
+│       │   │   ├── feat_decoder.py
+│       │   │   ├── feat_encoder.py
+│       │   │   ├── wave_generator.py
+│       │   │   └── __pycache__
+│       │   │       ├── feat_decoder.cpython-311.pyc
+│       │   │       ├── feat_decoder.cpython-312.pyc
+│       │   │       ├── feat_encoder.cpython-311.pyc
+│       │   │       ├── feat_encoder.cpython-312.pyc
+│       │   │       ├── wave_generator.cpython-311.pyc
+│       │   │       └── wave_generator.cpython-312.pyc
+│       │   ├── fsq
+│       │   │   ├── finite_scalar_quantization.py
+│       │   │   ├── residual_fsq.py
+│       │   │   └── __pycache__
+│       │   │       ├── finite_scalar_quantization.cpython-311.pyc
+│       │   │       ├── finite_scalar_quantization.cpython-312.pyc
+│       │   │       ├── residual_fsq.cpython-311.pyc
+│       │   │       └── residual_fsq.cpython-312.pyc
+│       │   ├── speaker
+│       │   │   ├── ecapa_tdnn.py
+│       │   │   ├── perceiver_encoder.py
+│       │   │   ├── pooling_layers.py
+│       │   │   ├── speaker_encoder.py
+│       │   │   └── __pycache__
+│       │   │       ├── ecapa_tdnn.cpython-311.pyc
+│       │   │       ├── ecapa_tdnn.cpython-312.pyc
+│       │   │       ├── perceiver_encoder.cpython-311.pyc
+│       │   │       ├── perceiver_encoder.cpython-312.pyc
+│       │   │       ├── pooling_layers.cpython-311.pyc
+│       │   │       ├── pooling_layers.cpython-312.pyc
+│       │   │       ├── speaker_encoder.cpython-311.pyc
+│       │   │       └── speaker_encoder.cpython-312.pyc
+│       │   └── vq
+│       │       ├── factorized_vector_quantize.py
+│       │       └── __pycache__
+│       │           ├── factorized_vector_quantize.cpython-311.pyc
+│       │           └── factorized_vector_quantize.cpython-312.pyc
+│       └── utils
+│           ├── audio.py
+│           ├── file.py
+│           ├── token_parser.py
+│           ├── __init__.py
+│           └── __pycache__
+│               ├── audio.cpython-311.pyc
+│               ├── audio.cpython-312.pyc
+│               ├── file.cpython-311.pyc
+│               ├── file.cpython-312.pyc
+│               ├── token_parser.cpython-311.pyc
+│               ├── token_parser.cpython-312.pyc
+│               ├── __init__.cpython-311.pyc
+│               └── __init__.cpython-312.pyc
+├── struct.txt
+├── TEMP
+├── temp_tools
+│   ├── analize_deps.py
+│   ├── clean_i18n.py
+│   ├── join.py
+│   ├── remap_i18n.py
+│   ├── remove_unused_imports.py
+│   └── used_dependencies.txt
+└── tools
+    ├── app.py
+    ├── calc_rvc_model_similarity.py
+    ├── download_assets.py
+    ├── download_model.py
+    ├── export_onnx.py
+    ├── infer
+    │   ├── infer-pm-index256.py
+    │   ├── train-index-v2.py
+    │   ├── train-index.py
+    │   └── trans_weights.py
+    ├── infer_batch_rvc.py
+    ├── infer_cli.py
+    ├── onnx_inference_demo.py
+    └── torchgate
+        ├── torchgate.py
+        ├── utils.py
+        └── __init__.py
