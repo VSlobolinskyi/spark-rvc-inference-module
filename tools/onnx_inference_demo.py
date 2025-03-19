@@ -6,10 +6,10 @@ hop_size = 512
 sampling_rate = 40000  # 采样率
 f0_up_key = 0  # 升降调
 sid = 0  # 角色ID
-f0_method = "dio"  # F0提取算法
-model_path = "ShirohaRVC.onnx"  # 模型的完整路径
+f0_method = "dio"  # F0Extract算法
+model_path = "ShirohaRVC.onnx"  # Model的完整路径
 vec_name = (
-    "vec-256-layer-9"  # 内部自动补齐为 f"pretrained/{vec_name}.onnx" 需要onnx的vec模型
+    "vec-256-layer-9"  # 内部自动补齐为 f"pretrained/{vec_name}.onnx" 需要onnx的vecModel
 )
 wav_path = "123.wav"  # 输入路径或ByteIO实例
 out_path = "out.wav"  # 输出路径或ByteIO实例

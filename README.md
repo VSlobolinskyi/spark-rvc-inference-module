@@ -14,19 +14,19 @@
 
 [![Discord](https://img.shields.io/badge/RVC%20Developers-Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/HcsmBBGyVk)
 
-[**更新日志**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/Changelog_CN.md) | [**常见问题解答**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94) | [**AutoDL·5毛钱训练AI歌手**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/Autodl%E8%AE%AD%E7%BB%83RVC%C2%B7AI%E6%AD%8C%E6%89%8B%E6%95%99%E7%A8%8B) | [**对照实验记录**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/Autodl%E8%AE%AD%E7%BB%83RVC%C2%B7AI%E6%AD%8C%E6%89%8B%E6%95%99%E7%A8%8B](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C%C2%B7%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95)) | [**在线演示**](https://modelscope.cn/studios/FlowerCry/RVCv2demo)
+[**更新日志**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/Changelog_CN.md) | [**FAQ (Frequently Asked Questions)**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94) | [**AutoDL·5毛钱TrainAI歌手**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/Autodl%E8%AE%AD%E7%BB%83RVC%C2%B7AI%E6%AD%8C%E6%89%8B%E6%95%99%E7%A8%8B) | [**对照实验记录**](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/Autodl%E8%AE%AD%E7%BB%83RVC%C2%B7AI%E6%AD%8C%E6%89%8B%E6%95%99%E7%A8%8B](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/wiki/%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C%C2%B7%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95)) | [**在线演示**](https://modelscope.cn/studios/FlowerCry/RVCv2demo)
 
 [**English**](./docs/en/README.en.md) | [**中文简体**](./README.md) | [**日本語**](./docs/jp/README.ja.md) | [**한국어**](./docs/kr/README.ko.md) ([**韓國語**](./docs/kr/README.ko.han.md)) | [**Français**](./docs/fr/README.fr.md) | [**Türkçe**](./docs/tr/README.tr.md) | [**Português**](./docs/pt/README.pt.md)
 
 </div>
 
-> 底模使用接近50小时的开源高质量VCTK训练集训练，无版权方面的顾虑，请大家放心使用
+> 底模使用接近50小时的开源高质量VCTKTrain集Train，无版权方面的顾虑，请大家放心使用
 
-> 请期待RVCv3的底模，参数更大，数据更大，效果更好，基本持平的推理速度，需要训练数据量更少。
+> 请期待RVCv3的底模，参数更大，数据更大，效果更好，基本持平的推理速度，需要Train数据量更少。
 
 <table>
    <tr>
-		<td align="center">训练推理界面</td>
+		<td align="center">Train推理界面</td>
 		<td align="center">实时变声界面</td>
 	</tr>
   <tr>
@@ -39,25 +39,25 @@
 	</tr>
   <tr>
     <td align="center">可以自由选择想要执行的操作。</td>
-		<td align="center">我们已经实现端到端170ms延迟。如使用ASIO输入输出设备，已能实现端到端90ms延迟，但非常依赖硬件驱动支持。</td>
+		<td align="center">我们已经实现端到端170ms延迟。如使用ASIO输入Output device，已能实现端到端90ms延迟，但非常依赖硬件驱动支持。</td>
 	</tr>
 </table>
 
 ## 简介
 本仓库具有以下特点
-+ 使用top1检索替换输入源特征为训练集特征来杜绝音色泄漏
-+ 即便在相对较差的显卡上也能快速训练
-+ 使用少量数据进行训练也能得到较好结果(推荐至少收集10分钟低底噪语音数据)
-+ 可以通过模型融合来改变音色(借助ckpt处理选项卡中的ckpt-merge)
++ 使用top1检索替换输入源特征为Train集特征来杜绝音色泄漏
++ 即便在相对较差的显卡上也能快速Train
++ 使用少量数据进行Train也能得到较好结果(推荐至少收集10分钟低底噪语音数据)
++ 可以通过ModelFusion来改变音色(借助ckpt Processing选项卡中的ckpt-merge)
 + 简单易用的网页界面
-+ 可调用UVR5模型来快速分离人声和伴奏
-+ 使用最先进的[人声音高提取算法InterSpeech2023-RMVPE](#参考项目)根绝哑音问题。效果最好（显著地）但比crepe_full更快、资源占用更小
++ 可调用UVR5Model来快速分离人声和伴奏
++ 使用最先进的[人声音高Extract算法InterSpeech2023-RMVPE](#参考项目)根绝哑音问题。效果最好（显著地）但比crepe_full更快、资源占用更小
 + A卡I卡加速支持
 
-点此查看我们的[演示视频](https://www.bilibili.com/video/BV1pm4y1z7Gm/) !
+点此View我们的[演示视频](https://www.bilibili.com/video/BV1pm4y1z7Gm/) !
 
 ## 环境配置
-以下指令需在 Python 版本大于3.8的环境中执行。  
+以下指令需在 Python Version大于3.8的环境中执行。  
 
 ### Windows/Linux/MacOS等平台通用方法
 下列方法任选其一。
@@ -66,7 +66,7 @@
 ```bash
 pip install torch torchvision torchaudio
 ```
-2. 如果是 win 系统 + Nvidia Ampere 架构(RTX30xx)，根据 #21 的经验，需要指定 pytorch 对应的 cuda 版本
+2. 如果Yes win 系统 + Nvidia Ampere 架构(RTX30xx)，根据 #21 的经验，需要指定 pytorch 对应的 cuda Version
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
 ```
@@ -94,7 +94,7 @@ pip install -r requirements-ipex.txt
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-通过 Poetry 安装依赖时，python 建议使用 3.7-3.10 版本，其余版本在安装 llvmlite==0.39.0 时会出现冲突
+通过 Poetry 安装依赖时，python 建议使用 3.7-3.10 Version，其余Version在安装 llvmlite==0.39.0 时会出现冲突
 ```bash
 poetry init -n
 poetry env use "path to your python.exe"
@@ -107,13 +107,13 @@ poetry run pip install -r requirments.txt
 sh ./run.sh
 ```
 
-## 其他预模型准备
-RVC需要其他一些预模型来推理和训练。
+## 其他预Model准备
+RVC需要其他一些预Model来推理和Train。
 
-你可以从我们的[Hugging Face space](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main/)下载到这些模型。
+你可以从我们的[Hugging Face space](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main/)下载到这些Model。
 
 ### 1. 下载 assets
-以下是一份清单，包括了所有RVC所需的预模型和其他文件的名称。你可以在`tools`文件夹找到下载它们的脚本。
+以下Yes一份清单，包括了所有RVC所需的预Model和其他文件的名称。你可以在`tools`文件夹找到下载它们的脚本。
 
 - ./assets/hubert/hubert_base.pt
 
@@ -121,7 +121,7 @@ RVC需要其他一些预模型来推理和训练。
 
 - ./assets/uvr5_weights
 
-想使用v2版本模型的话，需要额外下载
+想使用v2VersionModel的话，需要额外下载
 
 - ./assets/pretrained_v2
 
@@ -142,9 +142,9 @@ brew install ffmpeg
 
 - 下载[ffprobe.exe](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/ffprobe.exe)
 
-### 3. 下载 rmvpe 人声音高提取算法所需文件
+### 3. 下载 rmvpe 人声音高Extract算法所需文件
 
-如果你想使用最新的RMVPE人声音高提取算法，则你需要下载音高提取模型参数并放置于RVC根目录。
+如果你想使用最新的RMVPE人声音高Extract算法，则你需要下载音高ExtractModel参数并放置于RVC根目录。
 
 - 下载[rmvpe.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/rmvpe.pt)
 
@@ -156,7 +156,7 @@ brew install ffmpeg
 
 如果你想基于AMD的Rocm技术在Linux系统上运行RVC，请先在[这里](https://rocm.docs.amd.com/en/latest/deploy/linux/os-native/install.html)安装所需的驱动。
 
-若你使用的是Arch Linux，可以使用pacman来安装所需驱动：
+若你使用的YesArch Linux，可以使用pacman来安装所需驱动：
 ````
 pacman -S rocm-hip-sdk rocm-opencl-sdk
 ````

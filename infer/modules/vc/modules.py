@@ -53,7 +53,7 @@ class VC:
         if sid == "" or sid == []:
             if (
                 self.hubert_model is not None
-            ):  # 考虑到轮询, 需要加个判断看是否 sid 是由有模型切换到无模型的
+            ):  # 考虑到轮询, 需要加个判断看YesNo sid Yes由有Model切换到无Model的
                 logger.info("Clean model cache")
                 del (self.net_g, self.n_spk, self.hubert_model, self.tgt_sr)  # ,cpt
                 self.hubert_model = self.net_g = self.n_spk = self.hubert_model = (

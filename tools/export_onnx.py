@@ -2,9 +2,9 @@ import torch
 from infer.lib.infer_pack.models_onnx import SynthesizerTrnMsNSFsidM
 
 if __name__ == "__main__":
-    MoeVS = True  # 模型是否为MoeVoiceStudio（原MoeSS）使用
+    MoeVS = True  # ModelYesNo为MoeVoiceStudio（原MoeSS）使用
 
-    ModelPath = "Shiroha/shiroha.pth"  # 模型路径
+    ModelPath = "Shiroha/shiroha.pth"  # Path to Model:
     ExportedPath = "model.onnx"  # 输出路径
     hidden_channels = 256  # hidden_channels，为768Vec做准备
     cpt = torch.load(ModelPath, map_location="cpu")
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     test_ds = torch.LongTensor([0])  # 说话人ID
     test_rnd = torch.rand(1, 192, 200)  # 噪声（加入随机因子）
 
-    device = "cpu"  # 导出时设备（不影响使用模型）
+    device = "cpu"  # 导出时设备（不影响使用Model）
 
     net_g = SynthesizerTrnMsNSFsidM(
         *cpt["config"], is_half=False

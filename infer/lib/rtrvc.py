@@ -300,7 +300,7 @@ class RVC:
             self.f0_max,
             "full",
             batch_size=512,
-            # device=self.device if self.device.type!="privateuseone" else "cpu",###crepe不用半精度全部是全精度所以不愁###cpu延迟高到没法用
+            # device=self.device if self.device.type!="privateuseone" else "cpu",###crepe不用半精度全部Yes全精度所以不愁###cpu延迟高到没法用
             device=self.device,
             return_periodicity=True,
         )

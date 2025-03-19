@@ -15,7 +15,7 @@ def export_onnx(ModelPath, ExportedPath):
     test_ds = torch.LongTensor([0])  # 说话人ID
     test_rnd = torch.rand(1, 192, 200)  # 噪声（加入随机因子）
 
-    device = "cpu"  # 导出时设备（不影响使用模型）
+    device = "cpu"  # 导出时设备（不影响使用Model）
 
     net_g = SynthesizerTrnMsNSFsidM(
         *cpt["config"], is_half=False, version=cpt.get("version", "v1")
