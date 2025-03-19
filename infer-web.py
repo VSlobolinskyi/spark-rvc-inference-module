@@ -176,7 +176,7 @@ def change_choices():
         "__type__": "update",
     }
 
-
+# Only works for NVIDIA GPUs
 def clean():
     return {"value": "", "__type__": "update"}
 

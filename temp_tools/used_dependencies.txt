@@ -1,0 +1,3796 @@
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\configure_gpu_deps.py
+  Imports:
+    - re
+    - sys
+  From Imports:
+  Function Calls:
+    - amd_marker.search
+    - f.readlines
+    - f.writelines
+    - gpu_type.upper
+    - group
+    - len
+    - line.lstrip
+    - line.rstrip
+    - lower
+    - main
+    - nvidia_marker.search
+    - open
+    - output_lines.append
+    - print
+    - process_lines
+    - re.compile
+    - re.match
+    - re.sub
+    - separator.match
+    - startswith
+    - stripped.lstrip
+    - stripped.strip
+    - sys.exit
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer-web.py
+  Imports:
+    - fairseq
+    - faiss
+    - gradio
+    - json
+    - logging
+    - numpy
+    - os
+    - pathlib
+    - platform
+    - shutil
+    - sys
+    - threading
+    - torch
+    - traceback
+    - warnings
+  From Imports:
+    - dotenv: load_dotenv
+    - infer.modules.vc.modules: VC
+    - configs.config: Config
+    - sklearn.cluster: MiniBatchKMeans
+    - time: sleep
+    - subprocess: Popen
+    - random: shuffle
+    - infer.modules.onnx.export: export_onnx
+  Function Calls:
+    - Config
+    - Popen
+    - VC
+    - __init__
+    - any
+    - app.queue
+    - audio_upload.change
+    - but0.click
+    - but1.click
+    - change_choices
+    - ckpt_path.replace
+    - clean_button.click
+    - detach
+    - enumerate
+    - eo
+    - eval
+    - f.close
+    - f.read
+    - get_pretrained_models
+    - gpu_infos.append
+    - gpu_name.upper
+    - gpus.split
+    - gpus_rmvpe.split
+    - gr.Audio
+    - gr.Blocks
+    - gr.Button
+    - gr.Column
+    - gr.Dropdown
+    - gr.File
+    - gr.Group
+    - gr.Markdown
+    - gr.Number
+    - gr.Radio
+    - gr.Row
+    - gr.Slider
+    - gr.TabItem
+    - gr.Tabs
+    - gr.Textbox
+    - hasattr
+    - index_paths.append
+    - int
+    - isinstance
+    - join
+    - launch
+    - len
+    - load_dotenv
+    - logger.info
+    - logger.warning
+    - logging.getLogger
+    - lookup_indices
+    - mem.append
+    - min
+    - name.endswith
+    - name.replace
+    - names.append
+    - open
+    - os.access
+    - os.getcwd
+    - os.getenv
+    - os.listdir
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - os.walk
+    - p.poll
+    - p.wait
+    - ps.append
+    - range
+    - refresh_button.click
+    - setLevel
+    - shutil.rmtree
+    - sid0.change
+    - sleep
+    - sorted
+    - split
+    - start
+    - str
+    - strip
+    - super
+    - sys.path.append
+    - threading.Thread
+    - torch.cuda.device_count
+    - torch.cuda.get_device_name
+    - torch.cuda.get_device_properties
+    - torch.cuda.is_available
+    - torch.manual_seed
+    - traceback.print_exc
+    - uploaded_file.get
+    - uvr5_names.append
+    - warnings.filterwarnings
+    - x.clone
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\configs\config.py
+  Imports:
+    - argparse
+    - intel_extension_for_pytorch
+    - json
+    - logging
+    - os
+    - shutil
+    - sys
+    - torch
+    - torch_directml
+  From Imports:
+    - multiprocessing: cpu_count
+    - infer.modules.ipex: ipex_init
+  Function Calls:
+    - argparse.ArgumentParser
+    - cpu_count
+    - f.read
+    - f.write
+    - func
+    - hasattr
+    - int
+    - ipex_init
+    - json.load
+    - logger.info
+    - logging.getLogger
+    - open
+    - os.path.exists
+    - os.rename
+    - parser.add_argument
+    - parser.parse_args
+    - replace
+    - self.arg_parse
+    - self.device.split
+    - self.device_config
+    - self.gpu_name.upper
+    - self.has_mps
+    - self.has_xpu
+    - self.load_config_json
+    - self.use_fp32_config
+    - shutil.copy
+    - to
+    - torch.backends.mps.is_available
+    - torch.cuda.get_device_name
+    - torch.cuda.get_device_properties
+    - torch.cuda.is_available
+    - torch.device
+    - torch.xpu.is_available
+    - torch.zeros
+    - torch_directml.default_device
+    - torch_directml.device
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\audio.py
+  Imports:
+    - av
+    - ffmpeg
+    - numpy
+    - os
+    - platform
+    - re
+    - traceback
+  From Imports:
+    - io: BytesIO
+  Function Calls:
+    - RuntimeError
+    - av.open
+    - clean_path
+    - ffmpeg.input
+    - flatten
+    - inp.close
+    - inp.decode
+    - np.frombuffer
+    - os.path.exists
+    - ostream.encode
+    - out.add_stream
+    - out.close
+    - out.mux
+    - output
+    - path_str.replace
+    - path_str.strip
+    - platform.system
+    - re.sub
+    - run
+    - strip
+    - traceback.print_exc
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\rmvpe.py
+  Imports:
+    - intel_extension_for_pytorch
+    - librosa
+    - logging
+    - numpy
+    - onnxruntime
+    - os
+    - soundfile
+    - torch
+    - torch.nn
+    - torch.nn.functional
+  From Imports:
+    - io: BytesIO
+    - typing: List, Optional, Tuple
+    - infer.lib: jit
+    - infer.modules.ipex: ipex_init
+    - librosa.util: normalize, pad_center, tiny
+    - scipy.signal: get_window
+    - time: time
+    - librosa.filters: mel
+  Function Calls:
+    - BiGRU
+    - BytesIO
+    - ConvBlockRes
+    - Decoder
+    - DeepUnet
+    - E2E
+    - Encoder
+    - F.pad
+    - Intermediate
+    - MelSpectrogram
+    - RMVPE
+    - ResDecoderBlock
+    - ResEncoderBlock
+    - STFT
+    - T.unsqueeze
+    - __init__
+    - audio.copy
+    - audio.float
+    - audio.transpose
+    - cat.size
+    - concat_tensors.append
+    - conv
+    - conv2
+    - cpu
+    - enumerate
+    - fft.imag.pow
+    - fft.real.pow
+    - fft_window.float
+    - flatten
+    - float
+    - fold
+    - forward_basis.float
+    - get_default_model
+    - get_jit_model
+    - get_window
+    - hasattr
+    - hidden.astype
+    - hidden.squeeze
+    - input_data.unfold
+    - int
+    - inverse_basis.float
+    - ipex_init
+    - jit.load
+    - jit.rmvpe_jit_export
+    - layer
+    - len
+    - librosa.resample
+    - librosa.to_mono
+    - logger.info
+    - logger.warning
+    - logging.getLogger
+    - magnitude.size
+    - mel
+    - mel.cpu
+    - mel.float
+    - mel.half
+    - mel.transpose
+    - mel_output.half
+    - model.eval
+    - model.float
+    - model.half
+    - model.load_state_dict
+    - model_path.rstrip
+    - nn.AvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.ConvTranspose2d
+    - nn.Dropout
+    - nn.GRU
+    - nn.Linear
+    - nn.ModuleList
+    - nn.ReLU
+    - nn.Sequential
+    - nn.Sigmoid
+    - np.arange
+    - np.argmax
+    - np.array
+    - np.eye
+    - np.fft.fft
+    - np.imag
+    - np.linalg.pinv
+    - np.max
+    - np.pad
+    - np.real
+    - np.round
+    - np.sum
+    - np.vstack
+    - numpy
+    - ort.InferenceSession
+    - os.path.exists
+    - pad_center
+    - permute
+    - range
+    - repeat
+    - rmvpe.infer_from_audio
+    - self.bn
+    - self.cnn
+    - self.conv
+    - self.conv.append
+    - self.conv1
+    - self.conv2.append
+    - self.decode
+    - self.decoder
+    - self.encoder
+    - self.fc
+    - self.fft_window.pow
+    - self.gru
+    - self.intermediate
+    - self.inverse
+    - self.latent_channels.append
+    - self.layers.append
+    - self.mel2hidden
+    - self.mel_extractor
+    - self.model
+    - self.model.get_inputs
+    - self.model.get_outputs
+    - self.model.run
+    - self.model.to
+    - self.pool
+    - self.register_buffer
+    - self.shortcut
+    - self.stft.transform
+    - self.to_local_average_cents
+    - self.transform
+    - self.unet
+    - sf.read
+    - str
+    - super
+    - to
+    - todo_cents_mapping.append
+    - todo_salience.append
+    - torch.FloatTensor
+    - torch.atan2
+    - torch.cat
+    - torch.clamp
+    - torch.cos
+    - torch.cuda.is_available
+    - torch.device
+    - torch.from_numpy
+    - torch.hann_window
+    - torch.is_tensor
+    - torch.jit.load
+    - torch.load
+    - torch.log
+    - torch.matmul
+    - torch.nn.Fold
+    - torch.no_grad
+    - torch.sin
+    - torch.sqrt
+    - torch.stft
+    - torch.xpu.is_available
+    - transpose
+    - ttime
+    - unsqueeze
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\rtrvc.py
+  Imports:
+    - fairseq
+    - faiss
+    - numpy
+    - os
+    - parselmouth
+    - pyworld
+    - scipy.signal
+    - sys
+    - torch
+    - torch.nn
+    - torch.nn.functional
+    - torchcrepe
+    - traceback
+  From Imports:
+    - io: BytesIO
+    - infer.lib: jit
+    - infer.lib.jit.get_synthesizer: get_synthesizer
+    - time: time
+    - torchaudio.transforms: Resample
+    - multiprocessing: Manager
+    - configs.config: Config
+    - infer.lib.rmvpe: RMVPE
+    - torchfcpe: spawn_bundled_infer_model
+  Function Calls:
+    - BytesIO
+    - F.interpolate
+    - M
+    - RMVPE
+    - Resample
+    - all
+    - astype
+    - clone
+    - cpt.get
+    - cpu
+    - detach
+    - enumerate
+    - f0.float
+    - fairseq.checkpoint_utils.load_model_ensemble_and_task
+    - faiss.read_index
+    - feats.permute
+    - fill_
+    - float
+    - get_synthesizer
+    - hasattr
+    - hubert_model.eval
+    - hubert_model.float
+    - hubert_model.half
+    - hubert_model.to
+    - infered_audio.squeeze
+    - input_wav.float
+    - input_wav.half
+    - int
+    - jit.load
+    - jit.synthesizer_jit_export
+    - len
+    - long
+    - mm.dict
+    - np.abs
+    - np.ceil
+    - np.expand_dims
+    - np.floor
+    - np.log
+    - np.pad
+    - np.square
+    - np.sum
+    - np.zeros
+    - npy.astype
+    - numpy
+    - os.getcwd
+    - os.path.exists
+    - parselmouth.Sound
+    - permute
+    - pow
+    - print
+    - printt
+    - pyworld.harvest
+    - range
+    - res_f0.items
+    - self.get_f0
+    - self.get_f0_crepe
+    - self.get_f0_fcpe
+    - self.get_f0_post
+    - self.get_f0_rmvpe
+    - self.index.reconstruct_n
+    - self.index.search
+    - self.inp_q.put
+    - self.model.extract_features
+    - self.model.final_proj
+    - self.model_fcpe.infer
+    - self.model_rmvpe.infer_from_audio
+    - self.net_g.eval
+    - self.net_g.float
+    - self.net_g.half
+    - self.net_g.infer
+    - self.opt_q.get
+    - self.pth_path.rstrip
+    - set_default_model
+    - set_jit_model
+    - set_synthesizer
+    - signal.medfilt
+    - sorted
+    - spawn_bundled_infer_model
+    - squeeze
+    - str
+    - sys.path.append
+    - to
+    - to_pitch_ac
+    - torch.BoolTensor
+    - torch.LongTensor
+    - torch.cat
+    - torch.device
+    - torch.from_numpy
+    - torch.is_tensor
+    - torch.jit.load
+    - torch.log
+    - torch.no_grad
+    - torch.round
+    - torch.zeros
+    - torchcrepe.filter.mean
+    - torchcrepe.filter.median
+    - torchcrepe.predict
+    - traceback.format_exc
+    - traceback.print_exc
+    - ttime
+    - unsqueeze
+    - view
+    - weight.sum
+    - x.astype
+    - x.clone
+    - x.cpu
+    - x.to
+    - x.unsqueeze
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\slicer2.py
+  Imports:
+    - librosa
+    - numpy
+    - os.path
+    - soundfile
+  From Imports:
+    - argparse: ArgumentParser
+  Function Calls:
+    - ArgumentParser
+    - Slicer
+    - ValueError
+    - argmin
+    - chunks.append
+    - enumerate
+    - get_rms
+    - int
+    - len
+    - librosa.load
+    - list
+    - main
+    - max
+    - min
+    - np.abs
+    - np.lib.stride_tricks.as_strided
+    - np.mean
+    - np.moveaxis
+    - np.pad
+    - np.sqrt
+    - os.makedirs
+    - os.path.abspath
+    - os.path.basename
+    - os.path.dirname
+    - os.path.exists
+    - os.path.join
+    - parser.add_argument
+    - parser.parse_args
+    - range
+    - round
+    - rsplit
+    - self._apply_slice
+    - sil_tags.append
+    - slice
+    - slicer.slice
+    - soundfile.write
+    - squeeze
+    - tuple
+    - waveform.mean
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\attentions.py
+  Imports:
+    - copy
+    - math
+    - numpy
+    - torch
+  From Imports:
+    - typing: Optional
+    - torch: nn
+    - torch.nn: functional
+    - infer.lib.infer_pack: commons, modules
+    - infer.lib.infer_pack.modules: LayerNorm
+  Function Calls:
+    - F.pad
+    - F.softmax
+    - FFN
+    - LayerNorm
+    - MultiHeadAttention
+    - __init__
+    - attn_layers
+    - commons.subsequent_mask
+    - contiguous
+    - ffn_layers
+    - h_mask.unsqueeze
+    - int
+    - key.size
+    - key.transpose
+    - key.view
+    - math.sqrt
+    - max
+    - nn.Conv1d
+    - nn.Dropout
+    - nn.ModuleList
+    - nn.Parameter
+    - nn.init.xavier_uniform_
+    - norm_layers_1
+    - norm_layers_2
+    - output.transpose
+    - query.size
+    - query.view
+    - range
+    - scores.masked_fill
+    - self._absolute_position_to_relative_position
+    - self._attention_bias_proximal
+    - self._causal_padding
+    - self._get_relative_embeddings
+    - self._matmul_with_relative_keys
+    - self._matmul_with_relative_values
+    - self._relative_position_to_absolute_position
+    - self._same_padding
+    - self.attention
+    - self.attn_layers.append
+    - self.conv_1
+    - self.conv_2
+    - self.conv_k
+    - self.conv_k.bias.copy_
+    - self.conv_k.weight.copy_
+    - self.conv_o
+    - self.conv_q
+    - self.conv_v
+    - self.drop
+    - self.encdec_attn_layers.append
+    - self.ffn_layers.append
+    - self.norm_layers_0.append
+    - self.norm_layers_1.append
+    - self.norm_layers_2.append
+    - self.padding
+    - self.self_attn_layers.append
+    - super
+    - to
+    - torch.abs
+    - torch.arange
+    - torch.log1p
+    - torch.matmul
+    - torch.no_grad
+    - torch.ones_like
+    - torch.randn
+    - torch.relu
+    - torch.sigmoid
+    - torch.unsqueeze
+    - transpose
+    - tril
+    - triu
+    - value.view
+    - view
+    - x.size
+    - x.view
+    - x_flat.view
+    - x_mask.size
+    - x_mask.unsqueeze
+    - y.unsqueeze
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\attentions_onnx.py
+  Imports:
+    - copy
+    - math
+    - numpy
+    - torch
+  From Imports:
+    - typing: Optional
+    - torch: nn
+    - torch.nn: functional
+    - infer.lib.infer_pack: commons, modules
+    - infer.lib.infer_pack.modules: LayerNorm
+  Function Calls:
+    - F.pad
+    - F.softmax
+    - FFN
+    - LayerNorm
+    - MultiHeadAttention
+    - __init__
+    - attn_layers
+    - commons.subsequent_mask
+    - contiguous
+    - ffn_layers
+    - h_mask.unsqueeze
+    - int
+    - key.size
+    - key.transpose
+    - key.view
+    - math.sqrt
+    - nn.Conv1d
+    - nn.Dropout
+    - nn.ModuleList
+    - nn.Parameter
+    - nn.init.xavier_uniform_
+    - norm_layers_1
+    - norm_layers_2
+    - output.transpose
+    - query.size
+    - query.view
+    - range
+    - scores.masked_fill
+    - self._absolute_position_to_relative_position
+    - self._attention_bias_proximal
+    - self._causal_padding
+    - self._get_relative_embeddings
+    - self._matmul_with_relative_keys
+    - self._matmul_with_relative_values
+    - self._relative_position_to_absolute_position
+    - self._same_padding
+    - self.attention
+    - self.attn_layers.append
+    - self.conv_1
+    - self.conv_2
+    - self.conv_k
+    - self.conv_k.bias.copy_
+    - self.conv_k.weight.copy_
+    - self.conv_o
+    - self.conv_q
+    - self.conv_v
+    - self.drop
+    - self.encdec_attn_layers.append
+    - self.ffn_layers.append
+    - self.norm_layers_0.append
+    - self.norm_layers_1.append
+    - self.norm_layers_2.append
+    - self.padding
+    - self.self_attn_layers.append
+    - super
+    - to
+    - torch.abs
+    - torch.arange
+    - torch.clamp
+    - torch.log1p
+    - torch.matmul
+    - torch.no_grad
+    - torch.ones_like
+    - torch.randn
+    - torch.relu
+    - torch.sigmoid
+    - torch.unsqueeze
+    - transpose
+    - tril
+    - triu
+    - value.view
+    - view
+    - x.size
+    - x.view
+    - x_flat.view
+    - x_mask.size
+    - x_mask.unsqueeze
+    - y.unsqueeze
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\commons.py
+  Imports:
+    - math
+    - numpy
+    - torch
+  From Imports:
+    - typing: List, Optional
+    - torch: nn
+    - torch.nn: functional
+  Function Calls:
+    - F.pad
+    - classname.find
+    - convert_pad_shape
+    - cum_duration.view
+    - filter
+    - flip
+    - float
+    - get_timing_signal_1d
+    - int
+    - inv_timescales.unsqueeze
+    - isinstance
+    - length.max
+    - length.unsqueeze
+    - list
+    - m.weight.data.normal_
+    - math.log
+    - p.grad.data.clamp_
+    - p.grad.data.norm
+    - param_norm.item
+    - path.unsqueeze
+    - path.view
+    - position.unsqueeze
+    - rand_gumbel
+    - range
+    - reshape
+    - sequence_mask
+    - signal.to
+    - signal.view
+    - slice_segments
+    - to
+    - tolist
+    - torch.arange
+    - torch.cat
+    - torch.cos
+    - torch.cumsum
+    - torch.exp
+    - torch.log
+    - torch.ones
+    - torch.rand
+    - torch.sigmoid
+    - torch.sin
+    - torch.tanh
+    - torch.tensor
+    - torch.tril
+    - torch.zeros_like
+    - transpose
+    - unsqueeze
+    - x.size
+    - x.unsqueeze
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\models.py
+  Imports:
+    - logging
+    - math
+    - numpy
+    - torch
+  From Imports:
+    - typing: Optional
+    - torch: nn
+    - torch.nn: AvgPool1d, Conv1d, Conv2d, ConvTranspose1d, functional
+    - torch.nn.utils: remove_weight_norm, spectral_norm, weight_norm
+    - infer.lib.infer_pack: attentions, commons, modules
+    - infer.lib.infer_pack.commons: get_padding, init_weights
+  Function Calls:
+    - Conv1d
+    - Conv2d
+    - ConvTranspose1d
+    - DiscriminatorP
+    - DiscriminatorS
+    - F.interpolate
+    - F.leaky_relu
+    - F.pad
+    - Generator
+    - GeneratorNSF
+    - PosteriorEncoder
+    - ResidualCouplingBlock
+    - SineGen
+    - SourceModuleHnNSF
+    - TextEncoder
+    - __init__
+    - _forward_pre_hooks.values
+    - attentions.Encoder
+    - bool
+    - commons.rand_slice_segments
+    - commons.sequence_mask
+    - commons.slice_segments2
+    - d
+    - enumerate
+    - f0.unsqueeze
+    - float
+    - flow
+    - flow.forward
+    - flow_head.item
+    - fmap.append
+    - fmap_gs.append
+    - fmap_rs.append
+    - fmod
+    - get_padding
+    - har_source.transpose
+    - hasattr
+    - int
+    - isinstance
+    - l
+    - l._forward_pre_hooks.values
+    - l.remove_weight_norm
+    - len
+    - logger.debug
+    - logging.getLogger
+    - math.prod
+    - math.sqrt
+    - modules.Flip
+    - modules.ResidualCouplingLayer
+    - modules.WN
+    - n_res.item
+    - nn.Conv1d
+    - nn.Embedding
+    - nn.LeakyReLU
+    - nn.Linear
+    - nn.ModuleList
+    - noise_convs
+    - norm_f
+    - rad.reshape
+    - rad2.cumsum
+    - range
+    - remove_weight_norm
+    - resblock
+    - reshape
+    - return_length.item
+    - self._f02sine
+    - self._f02uv
+    - self.cond
+    - self.conv_post
+    - self.conv_pre
+    - self.dec
+    - self.dec._forward_pre_hooks.values
+    - self.dec.remove_weight_norm
+    - self.emb_g
+    - self.emb_phone
+    - self.emb_pitch
+    - self.enc
+    - self.enc._forward_pre_hooks.values
+    - self.enc.remove_weight_norm
+    - self.enc_p
+    - self.enc_q
+    - self.enc_q._forward_pre_hooks.values
+    - self.enc_q.remove_weight_norm
+    - self.encoder
+    - self.flow
+    - self.flow._forward_pre_hooks.values
+    - self.flow.remove_weight_norm
+    - self.flows.append
+    - self.l_linear
+    - self.l_sin_gen
+    - self.l_tanh
+    - self.lrelu
+    - self.m_source
+    - self.noise_convs.append
+    - self.pre
+    - self.proj
+    - self.resblocks._forward_pre_hooks.values
+    - self.resblocks.append
+    - self.ups.append
+    - self.ups.apply
+    - sine_wavs.to
+    - skip_head.item
+    - str
+    - super
+    - to
+    - torch.arange
+    - torch.clamp
+    - torch.exp
+    - torch.flatten
+    - torch.fmod
+    - torch.nn.Linear
+    - torch.nn.Tanh
+    - torch.nn.Upsample
+    - torch.nn.utils.remove_weight_norm
+    - torch.no_grad
+    - torch.ones_like
+    - torch.rand
+    - torch.randn_like
+    - torch.sin
+    - torch.split
+    - torch.tanh
+    - torch.transpose
+    - torch.unsqueeze
+    - torch.xpu.is_available
+    - transpose
+    - unsqueeze
+    - ups
+    - uv.float
+    - uv.transpose
+    - weight_norm
+    - x.size
+    - x.to
+    - x.view
+    - y_d_gs.append
+    - y_d_rs.append
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\models_onnx.py
+  Imports:
+    - infer.lib.infer_pack.attentions_onnx
+    - logging
+    - math
+    - numpy
+    - torch
+  From Imports:
+    - torch: nn
+    - torch.nn: AvgPool1d, Conv1d, Conv2d, ConvTranspose1d, functional
+    - torch.nn.utils: remove_weight_norm, spectral_norm, weight_norm
+    - infer.lib.infer_pack: commons, modules
+    - infer.lib.infer_pack.commons: get_padding, init_weights
+  Function Calls:
+    - Conv1d
+    - Conv2d
+    - ConvTranspose1d
+    - DiscriminatorP
+    - DiscriminatorS
+    - F.interpolate
+    - F.leaky_relu
+    - F.pad
+    - GeneratorNSF
+    - PosteriorEncoder
+    - ResidualCouplingBlock
+    - SineGen
+    - SourceModuleHnNSF
+    - TextEncoder256
+    - TextEncoder768
+    - __init__
+    - attentions.Encoder
+    - commons.sequence_mask
+    - d
+    - enumerate
+    - f0.unsqueeze
+    - float
+    - flow
+    - fmap.append
+    - fmap_gs.append
+    - fmap_rs.append
+    - fmod
+    - g.reshape
+    - g.transpose
+    - g.unsqueeze
+    - get_padding
+    - har_source.transpose
+    - l
+    - l.remove_weight_norm
+    - len
+    - logger.debug
+    - logging.getLogger
+    - math.sqrt
+    - modules.Flip
+    - modules.ResidualCouplingLayer
+    - modules.WN
+    - nn.Conv1d
+    - nn.Embedding
+    - nn.LeakyReLU
+    - nn.Linear
+    - nn.ModuleList
+    - norm_f
+    - np.prod
+    - rad.reshape
+    - rad2.cumsum
+    - range
+    - remove_weight_norm
+    - resblock
+    - reshape
+    - reversed
+    - self._f02sine
+    - self._f02uv
+    - self.cond
+    - self.conv_post
+    - self.conv_pre
+    - self.dec
+    - self.dec.remove_weight_norm
+    - self.emb_g
+    - self.emb_phone
+    - self.emb_pitch
+    - self.enc
+    - self.enc.remove_weight_norm
+    - self.enc_p
+    - self.enc_q.remove_weight_norm
+    - self.encoder
+    - self.flow
+    - self.flow.remove_weight_norm
+    - self.flows.append
+    - self.l_linear
+    - self.l_sin_gen
+    - self.l_tanh
+    - self.lrelu
+    - self.m_source
+    - self.noise_convs.append
+    - self.pre
+    - self.proj
+    - self.resblocks.append
+    - self.speaker_map.unsqueeze
+    - self.ups.append
+    - self.ups.apply
+    - sine_wavs.half
+    - squeeze
+    - super
+    - to
+    - torch.LongTensor
+    - torch.arange
+    - torch.exp
+    - torch.flatten
+    - torch.fmod
+    - torch.nn.Linear
+    - torch.nn.Tanh
+    - torch.nn.Upsample
+    - torch.no_grad
+    - torch.ones_like
+    - torch.rand
+    - torch.randn_like
+    - torch.sin
+    - torch.split
+    - torch.sum
+    - torch.tanh
+    - torch.transpose
+    - torch.unsqueeze
+    - torch.zeros
+    - transpose
+    - type
+    - uv.float
+    - uv.transpose
+    - weight_norm
+    - x.size
+    - x.view
+    - y_d_gs.append
+    - y_d_rs.append
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules.py
+  Imports:
+    - copy
+    - math
+    - numpy
+    - scipy
+    - torch
+  From Imports:
+    - typing: Optional, Tuple
+    - torch: nn
+    - torch.nn: AvgPool1d, Conv1d, Conv2d, ConvTranspose1d, functional
+    - torch.nn.utils: remove_weight_norm, weight_norm
+    - infer.lib.infer_pack: commons
+    - infer.lib.infer_pack.commons: get_padding, init_weights
+    - infer.lib.infer_pack.transforms: piecewise_rational_quadratic_transform
+  Function Calls:
+    - Conv1d
+    - DDSConv
+    - F.gelu
+    - F.layer_norm
+    - F.leaky_relu
+    - LayerNorm
+    - WN
+    - __init__
+    - c
+    - c1
+    - c2
+    - commons.fused_add_tanh_sigmoid_multiply
+    - enumerate
+    - float
+    - get_padding
+    - h.reshape
+    - in_layer
+    - int
+    - l._forward_pre_hooks.values
+    - math.sqrt
+    - nn.Conv1d
+    - nn.Dropout
+    - nn.ModuleList
+    - nn.Parameter
+    - nn.ReLU
+    - nn.Sequential
+    - permute
+    - piecewise_rational_quadratic_transform
+    - range
+    - remove_weight_norm
+    - res_skip_layer
+    - self.cond_layer
+    - self.cond_layer._forward_pre_hooks.values
+    - self.conv_layers.append
+    - self.convs
+    - self.convs.apply
+    - self.convs1.apply
+    - self.convs2.apply
+    - self.convs_1x1.append
+    - self.convs_sep.append
+    - self.drop
+    - self.enc
+    - self.enc._forward_pre_hooks.values
+    - self.enc.remove_weight_norm
+    - self.in_layers.append
+    - self.norm_layers.append
+    - self.norms_1.append
+    - self.norms_2.append
+    - self.post
+    - self.post.bias.data.zero_
+    - self.post.weight.data.zero_
+    - self.pre
+    - self.proj
+    - self.proj.bias.data.zero_
+    - self.proj.weight.data.zero_
+    - self.relu_drop
+    - self.res_skip_layers.append
+    - super
+    - to
+    - torch.IntTensor
+    - torch.cat
+    - torch.clamp_min
+    - torch.exp
+    - torch.flip
+    - torch.log
+    - torch.nn.Conv1d
+    - torch.nn.ModuleList
+    - torch.nn.utils.remove_weight_norm
+    - torch.nn.utils.weight_norm
+    - torch.ones
+    - torch.split
+    - torch.sum
+    - torch.zeros
+    - torch.zeros_like
+    - weight_norm
+    - x.size
+    - x.transpose
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\onnx_inference.py
+  Imports:
+    - librosa
+    - logging
+    - numpy
+    - onnxruntime
+    - soundfile
+  From Imports:
+    - lib.infer_pack.modules.F0Predictor.PMF0Predictor: PMF0Predictor
+    - lib.infer_pack.modules.F0Predictor.HarvestF0Predictor: HarvestF0Predictor
+    - lib.infer_pack.modules.F0Predictor.DioF0Predictor: DioF0Predictor
+  Function Calls:
+    - ContentVec
+    - DioF0Predictor
+    - Exception
+    - HarvestF0Predictor
+    - PMF0Predictor
+    - RuntimeError
+    - astype
+    - f0_predictor.compute_f0
+    - feats.mean
+    - format
+    - get_f0_predictor
+    - len
+    - librosa.load
+    - librosa.resample
+    - logger.info
+    - logging.getLogger
+    - logits.transpose
+    - np.array
+    - np.expand_dims
+    - np.log
+    - np.pad
+    - np.random.randn
+    - np.repeat
+    - np.rint
+    - onnxruntime.InferenceSession
+    - pitch.reshape
+    - pitchf.copy
+    - pitchf.reshape
+    - self.forward
+    - self.model.get_inputs
+    - self.model.run
+    - self.vec_model
+    - squeeze
+    - transpose
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\transforms.py
+  Imports:
+    - numpy
+    - torch
+  From Imports:
+    - torch.nn: functional
+  Function Calls:
+    - F.pad
+    - F.softmax
+    - F.softplus
+    - RuntimeError
+    - ValueError
+    - all
+    - b.pow
+    - cumheights.gather
+    - cumwidths.gather
+    - delta.gather
+    - derivatives.gather
+    - format
+    - gather
+    - heights.gather
+    - input_delta.pow
+    - np.exp
+    - np.log
+    - pow
+    - rational_quadratic_spline
+    - root.pow
+    - searchsorted
+    - spline_fn
+    - theta.pow
+    - torch.cumsum
+    - torch.log
+    - torch.max
+    - torch.min
+    - torch.sqrt
+    - torch.sum
+    - torch.zeros_like
+    - widths.gather
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules\F0Predictor\DioF0Predictor.py
+  Imports:
+    - numpy
+    - pyworld
+  From Imports:
+    - infer.lib.infer_pack.modules.F0Predictor.F0Predictor: F0Predictor
+  Function Calls:
+    - enumerate
+    - float
+    - len
+    - np.arange
+    - np.array
+    - np.interp
+    - np.nan_to_num
+    - np.reshape
+    - np.zeros
+    - pyworld.dio
+    - pyworld.stonemask
+    - range
+    - round
+    - self.interpolate_f0
+    - self.resize_f0
+    - wav.astype
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules\F0Predictor\F0Predictor.py
+  Imports:
+  From Imports:
+  Function Calls:
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules\F0Predictor\HarvestF0Predictor.py
+  Imports:
+    - numpy
+    - pyworld
+  From Imports:
+    - infer.lib.infer_pack.modules.F0Predictor.F0Predictor: F0Predictor
+  Function Calls:
+    - float
+    - len
+    - np.arange
+    - np.array
+    - np.interp
+    - np.nan_to_num
+    - np.reshape
+    - np.zeros
+    - pyworld.harvest
+    - pyworld.stonemask
+    - range
+    - self.interpolate_f0
+    - self.resize_f0
+    - wav.astype
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules\F0Predictor\PMF0Predictor.py
+  Imports:
+    - numpy
+    - parselmouth
+  From Imports:
+    - infer.lib.infer_pack.modules.F0Predictor.F0Predictor: F0Predictor
+  Function Calls:
+    - abs
+    - float
+    - len
+    - np.pad
+    - np.reshape
+    - np.zeros
+    - parselmouth.Sound
+    - range
+    - self.interpolate_f0
+    - to_pitch_ac
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\infer_pack\modules\F0Predictor\__init__.py
+  Imports:
+  From Imports:
+  Function Calls:
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\jit\get_hubert.py
+  Imports:
+    - math
+    - numpy
+    - random
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - typing: Optional, Tuple
+    - fairseq.checkpoint_utils: load_model_ensemble_and_task
+    - fairseq.utils: index_put
+  Function Calls:
+    - Exception
+    - F.dropout
+    - F.pad
+    - apply_mask
+    - arrange
+    - compute_mask_indices
+    - enumerate
+    - expand
+    - extract_features
+    - float
+    - hubert_extract_features
+    - hubert_model.extract_features
+    - hubert_model.final_proj
+    - hubert_model.to
+    - index_put
+    - int
+    - isinstance
+    - item
+    - layer
+    - layer_results.append
+    - len
+    - load_model_ensemble_and_task
+    - long
+    - mask_channel_indices.to
+    - mask_idc.extend
+    - mask_idc.int
+    - mask_idcs.append
+    - mask_indices.to
+    - math.ceil
+    - max
+    - min
+    - new_parts.append
+    - np.random.rand
+    - np.random.random
+    - output_layer.item
+    - pad_to_multiple
+    - parts.extend
+    - parts.pop
+    - probs.float
+    - random.sample
+    - range
+    - round
+    - self._forward
+    - self.layer_norm
+    - self.pos_conv
+    - sorted
+    - sum
+    - torch.asarray
+    - torch.device
+    - torch.full
+    - torch.multinomial
+    - torch.normal
+    - torch.rand
+    - torch.randint
+    - torch.sum
+    - torch.unique
+    - torch.zeros_like
+    - undo_pad
+    - unsqueeze
+    - x.new_zeros
+    - x.size
+    - x.transpose
+    - x_conv.transpose
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\jit\get_rmvpe.py
+  Imports:
+    - torch
+  From Imports:
+    - infer.lib.rmvpe: E2E
+  Function Calls:
+    - E2E
+    - model.eval
+    - model.load_state_dict
+    - model.to
+    - torch.device
+    - torch.load
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\jit\get_synthesizer.py
+  Imports:
+    - torch
+  From Imports:
+    - infer.lib.infer_pack.models: SynthesizerTrnMs256NSFsid, SynthesizerTrnMs256NSFsid_nono, SynthesizerTrnMs768NSFsid, SynthesizerTrnMs768NSFsid_nono
+  Function Calls:
+    - SynthesizerTrnMs256NSFsid
+    - SynthesizerTrnMs256NSFsid_nono
+    - SynthesizerTrnMs768NSFsid
+    - SynthesizerTrnMs768NSFsid_nono
+    - cpt.get
+    - net_g.eval
+    - net_g.float
+    - net_g.load_state_dict
+    - net_g.remove_weight_norm
+    - to
+    - torch.device
+    - torch.load
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\jit\__init__.py
+  Imports:
+    - pickle
+    - time
+    - torch
+  From Imports:
+    - io: BytesIO
+    - tqdm: tqdm
+    - collections: OrderedDict
+    - get_synthesizer: get_synthesizer
+    - get_rmvpe: get_rmvpe
+    - get_hubert: get_hubert_model
+  Function Calls:
+    - BytesIO
+    - OrderedDict
+    - ValueError
+    - benchmark
+    - buffer.getvalue
+    - cpt.pop
+    - export
+    - float
+    - get_hubert_model
+    - get_rmvpe
+    - get_synthesizer
+    - half
+    - isinstance
+    - load_inputs
+    - model
+    - model.eval
+    - model.float
+    - model.half
+    - model_jit.float
+    - model_jit.half
+    - model_jit.to
+    - model_path.rstrip
+    - model_type.lower
+    - open
+    - parm.keys
+    - pickle.dump
+    - pickle.load
+    - print
+    - range
+    - save
+    - str
+    - time.perf_counter
+    - to
+    - torch.device
+    - torch.jit.save
+    - torch.jit.script
+    - torch.jit.trace
+    - torch.load
+    - tqdm
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\utils.py
+  Imports:
+    - json
+    - numpy
+    - torch
+  From Imports:
+    - tqdm: tqdm
+  Function Calls:
+    - X_mag.max
+    - X_mag_window.half
+    - X_mag_window.to
+    - _execute
+    - cpu
+    - int
+    - json.load
+    - len
+    - list
+    - load_data
+    - make_padding
+    - model.eval
+    - model.predict
+    - model.state_dict
+    - np.abs
+    - np.angle
+    - np.ceil
+    - np.concatenate
+    - np.exp
+    - np.pad
+    - numpy
+    - open
+    - pred.detach
+    - preds.append
+    - preprocess
+    - range
+    - str
+    - sum
+    - torch.from_numpy
+    - torch.no_grad
+    - tqdm
+    - values
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\dataset.py
+  Imports:
+    - numpy
+    - os
+    - random
+    - torch
+    - torch.utils.data
+  From Imports:
+    - tqdm: tqdm
+  Function Calls:
+    - ValueError
+    - VocalRemoverValidationSet
+    - enumerate
+    - format
+    - int
+    - len
+    - list
+    - make_padding
+    - make_pair
+    - max
+    - mean
+    - np.abs
+    - np.ceil
+    - np.load
+    - np.max
+    - np.pad
+    - np.random.beta
+    - np.random.permutation
+    - np.random.randint
+    - np.random.uniform
+    - np.savez
+    - np.zeros
+    - os.listdir
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - os.path.splitext
+    - patch_list.append
+    - random.shuffle
+    - range
+    - sorted
+    - spec_utils.cache_or_load
+    - spec_utils.reduce_vocal_aggressively
+    - tqdm
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_123812KB .py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_123821KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_33966KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.conv6
+    - self.conv7
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_537227KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.conv6
+    - self.conv7
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_537238KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - SeperableConv2DBNActiv
+    - __init__
+    - activ
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.conv6
+    - self.conv7
+    - self.dropout
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\layers_new.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - Conv2DBNActiv
+    - F.interpolate
+    - __init__
+    - activ
+    - h.permute
+    - h.reshape
+    - h.size
+    - nn.AdaptiveAvgPool2d
+    - nn.BatchNorm1d
+    - nn.BatchNorm2d
+    - nn.Conv2d
+    - nn.Dropout2d
+    - nn.LSTM
+    - nn.Linear
+    - nn.ReLU
+    - nn.Sequential
+    - self.bottleneck
+    - self.conv
+    - self.conv1
+    - self.conv2
+    - self.conv3
+    - self.conv4
+    - self.conv5
+    - self.dense
+    - self.dropout
+    - self.lstm
+    - spec_utils.crop_center
+    - super
+    - torch.cat
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\model_param_init.py
+  Imports:
+    - json
+    - os
+    - pathlib
+    - zipfile
+  From Imports:
+  Function Calls:
+    - f.read
+    - int
+    - json.loads
+    - k.isdigit
+    - open
+    - pathlib.Path
+    - zip.read
+    - zipfile.ZipFile
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets.py
+  Imports:
+    - layers
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_123812KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_123821KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_33966KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_537227KB.py
+  Imports:
+    - numpy
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_537238KB.py
+  Imports:
+    - numpy
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_61968KB.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseASPPNet
+    - F.pad
+    - __init__
+    - aux1.size
+    - aux2.size
+    - h.size
+    - layers.ASPPModule
+    - layers.Conv2DBNActiv
+    - layers.Decoder
+    - layers.Encoder
+    - mask.size
+    - nn.Conv2d
+    - self.aspp
+    - self.aux1_out
+    - self.aux2_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.forward
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_bridge
+    - self.stg2_full_band_net
+    - self.stg3_bridge
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.pow
+    - torch.sigmoid
+    - x.clone
+    - x.detach
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\nets_new.py
+  Imports:
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - torch: nn
+  Function Calls:
+    - BaseNet
+    - F.pad
+    - __init__
+    - aux.size
+    - layers_new.ASPPModule
+    - layers_new.Conv2DBNActiv
+    - layers_new.Decoder
+    - layers_new.Encoder
+    - layers_new.LSTMModule
+    - mask.size
+    - nn.Conv2d
+    - nn.Sequential
+    - pred_mag.size
+    - self.aspp
+    - self.aux_out
+    - self.dec1
+    - self.dec2
+    - self.dec3
+    - self.dec4
+    - self.enc1
+    - self.enc2
+    - self.enc3
+    - self.enc4
+    - self.enc5
+    - self.forward
+    - self.lstm_dec2
+    - self.out
+    - self.stg1_high_band_net
+    - self.stg1_low_band_net
+    - self.stg2_high_band_net
+    - self.stg2_low_band_net
+    - self.stg3_full_band_net
+    - super
+    - torch.cat
+    - torch.sigmoid
+    - x.size
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\lib\uvr5_pack\lib_v5\spec_utils.py
+  Imports:
+    - argparse
+    - cv2
+    - hashlib
+    - json
+    - librosa
+    - math
+    - numpy
+    - os
+    - soundfile
+    - sys
+    - threading
+    - time
+  From Imports:
+    - tqdm: tqdm
+    - model_param_init: ModelParameters
+  Function Calls:
+    - ModelParameters
+    - ValueError
+    - align_wave_head_and_tail
+    - argparse.ArgumentParser
+    - args.algorithm.startswith
+    - cmb_spectrogram_to_wave
+    - combine_spectrograms
+    - cv2.imwrite
+    - encode
+    - ensembling
+    - enumerate
+    - fft_hp_filter
+    - fft_lp_filter
+    - format
+    - h1.size
+    - h2.size
+    - hashlib.sha1
+    - hexdigest
+    - img.transpose
+    - json.dumps
+    - len
+    - librosa.istft
+    - librosa.load
+    - librosa.resample
+    - librosa.stft
+    - mag.copy
+    - math.pow
+    - min
+    - np.abs
+    - np.add
+    - np.angle
+    - np.append
+    - np.array
+    - np.asfortranarray
+    - np.clip
+    - np.concatenate
+    - np.diff
+    - np.exp
+    - np.flip
+    - np.insert
+    - np.iscomplexobj
+    - np.linspace
+    - np.load
+    - np.log10
+    - np.max
+    - np.multiply
+    - np.ndarray
+    - np.save
+    - np.subtract
+    - np.uint8
+    - np.where
+    - np.zeros
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - os.path.splitext
+    - os.system
+    - p.add_argument
+    - p.parse_args
+    - range
+    - reduce_vocal_aggressively
+    - ref.mean
+    - sf.write
+    - spectrogram_to_image
+    - spectrogram_to_wave
+    - thread.join
+    - thread.start
+    - threading.Thread
+    - time.time
+    - tqdm
+    - wave_to_spectrogram
+    - y.max
+    - y.min
+    - zip
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\ipex\attention.py
+  Imports:
+    - intel_extension_for_pytorch
+    - torch
+  From Imports:
+  Function Calls:
+    - input.element_size
+    - len
+    - mat2.to
+    - original_scaled_dot_product_attention
+    - original_torch_bmm
+    - query.element_size
+    - range
+    - torch.zeros
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\ipex\gradscaler.py
+  Imports:
+    - intel_extension_for_pytorch
+    - intel_extension_for_pytorch._C
+    - torch
+  From Imports:
+    - collections: defaultdict
+  Function Calls:
+    - RuntimeError
+    - ValueError
+    - _MultiDeviceReplicator
+    - _growth_tracker.to
+    - _scale.to
+    - append
+    - core._amp_foreach_non_finite_check_and_unscale_
+    - core._amp_update_scale_
+    - defaultdict
+    - double
+    - float
+    - found_inf.to
+    - hasattr
+    - id
+    - isinstance
+    - len
+    - new_scale.numel
+    - optimizer.sync_grad
+    - param.grad._values
+    - param.grad.coalesce
+    - per_device_and_dtype_grads.items
+    - per_device_found_inf.get
+    - per_device_inv_scale.get
+    - per_dtype_grads.values
+    - range
+    - reciprocal
+    - self._check_scale_growth_tracker
+    - self._per_optimizer_states.values
+    - self._scale.copy_
+    - self._scale.fill_
+    - self._scale.to
+    - self._unscale_grads_
+    - to
+    - to_unscale.to
+    - torch.full
+    - torch.no_grad
+    - values
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\ipex\hijacks.py
+  Imports:
+    - contextlib
+    - importlib
+    - intel_extension_for_pytorch
+    - torch
+  From Imports:
+  Function Calls:
+    - A.to
+    - B.to
+    - CondFunc
+    - __new__
+    - bool
+    - check_device
+    - contextlib.nullcontext
+    - getattr
+    - hasattr
+    - id
+    - importlib.import_module
+    - input.size
+    - input.to
+    - ipex_no_cuda
+    - isinstance
+    - join
+    - len
+    - module.to
+    - ndarray.astype
+    - orig_func
+    - orig_func.split
+    - original_autocast
+    - original_interpolate
+    - original_linalg_solve
+    - original_torch_cat
+    - print
+    - q.cancel_join_thread
+    - q.close
+    - range
+    - return_xpu
+    - self
+    - self.__cond_func
+    - self.__init__
+    - self.__orig_func
+    - self.__sub_func
+    - self._mark_worker_as_unavailable
+    - self._pin_memory_thread.join
+    - self._pin_memory_thread_done_event.set
+    - self._worker_result_queue.cancel_join_thread
+    - self._worker_result_queue.close
+    - self._worker_result_queue.put
+    - self._workers_done_event.set
+    - setattr
+    - super
+    - tensor.to
+    - to
+    - torch.device
+    - torch.ones
+    - torch.utils.data._utils.signal_handling._remove_worker_pids
+    - torch.xpu.Generator
+    - torch.xpu.has_fp64_dtype
+    - torch.zeros
+    - w.is_alive
+    - w.join
+    - w.terminate
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\ipex\__init__.py
+  Imports:
+    - contextlib
+    - intel_extension_for_pytorch
+    - os
+    - sys
+    - torch
+  From Imports:
+    - hijacks: ipex_hijacks
+    - attention: attention_init
+    - gradscaler: gradscaler_init
+    - diffusers: ipex_diffusers
+  Function Calls:
+    - attention_init
+    - contextlib.nullcontext
+    - gradscaler_init
+    - hasattr
+    - ipex_diffusers
+    - ipex_hijacks
+    - os.popen
+    - read
+    - torch.xpu.get_device_properties
+    - torch.xpu.memory_allocated
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\onnx\export.py
+  Imports:
+    - onnx
+    - onnxsim
+    - torch
+  From Imports:
+    - infer.lib.infer_pack.models_onnx: SynthesizerTrnMsNSFsidM
+  Function Calls:
+    - SynthesizerTrnMsNSFsidM
+    - cpt.get
+    - long
+    - net_g.load_state_dict
+    - onnx.save
+    - onnxsim.simplify
+    - test_ds.to
+    - test_phone.to
+    - test_phone_lengths.to
+    - test_pitch.to
+    - test_pitchf.to
+    - test_rnd.to
+    - torch.LongTensor
+    - torch.load
+    - torch.onnx.export
+    - torch.rand
+    - torch.randint
+    - torch.tensor
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\extract_feature_print.py
+  Imports:
+    - fairseq
+    - numpy
+    - os
+    - soundfile
+    - sys
+    - torch
+    - torch.nn.functional
+    - torch_directml
+    - traceback
+  From Imports:
+  Function Calls:
+    - F.layer_norm
+    - cpu
+    - detach
+    - enumerate
+    - exit
+    - f.flush
+    - f.write
+    - fairseq.checkpoint_utils.load_model_ensemble_and_task
+    - feats.dim
+    - feats.half
+    - feats.mean
+    - feats.squeeze
+    - feats.to
+    - feats.view
+    - file.endswith
+    - file.replace
+    - fill_
+    - float
+    - format
+    - int
+    - join
+    - len
+    - list
+    - lower
+    - max
+    - model.eval
+    - model.extract_features
+    - model.final_proj
+    - model.half
+    - model.to
+    - np.isnan
+    - np.save
+    - numpy
+    - open
+    - os.access
+    - os.listdir
+    - os.makedirs
+    - os.path.exists
+    - padding_mask.to
+    - print
+    - printt
+    - readwave
+    - sf.read
+    - sorted
+    - str
+    - sum
+    - to
+    - torch.BoolTensor
+    - torch.backends.mps.is_available
+    - torch.cuda.is_available
+    - torch.from_numpy
+    - torch.no_grad
+    - torch_directml.default_device
+    - torch_directml.device
+    - traceback.format_exc
+    - x.clone
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\preprocess.py
+  Imports:
+    - librosa
+    - multiprocessing
+    - numpy
+    - os
+    - sys
+    - traceback
+  From Imports:
+    - scipy: signal
+    - scipy.io: wavfile
+    - infer.lib.audio: load_audio
+    - infer.lib.slicer2: Slicer
+  Function Calls:
+    - PreProcess
+    - Slicer
+    - enumerate
+    - f.flush
+    - f.write
+    - float
+    - int
+    - join
+    - len
+    - librosa.resample
+    - list
+    - load_audio
+    - max
+    - multiprocessing.Process
+    - np.abs
+    - open
+    - os.getcwd
+    - os.listdir
+    - os.makedirs
+    - p.start
+    - pp.pipeline_mp_inp_dir
+    - preprocess_trainset
+    - print
+    - println
+    - ps.append
+    - range
+    - self.norm_write
+    - self.pipeline
+    - self.pipeline_mp
+    - self.slicer.slice
+    - signal.butter
+    - signal.lfilter
+    - sorted
+    - sys.path.append
+    - tmp_audio.astype
+    - traceback.format_exc
+    - wavfile.write
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\train.py
+  Imports:
+    - datetime
+    - intel_extension_for_pytorch
+    - logging
+    - os
+    - sys
+    - torch
+    - torch.distributed
+    - torch.multiprocessing
+  From Imports:
+    - infer.lib.train: utils
+    - random: randint, shuffle
+    - infer.modules.ipex: ipex_init
+    - infer.modules.ipex.gradscaler: gradscaler_init
+    - torch.xpu.amp: autocast
+    - torch.cuda.amp: GradScaler, autocast
+    - time: sleep, time
+    - torch.nn: functional
+    - torch.nn.parallel: DistributedDataParallel
+    - torch.utils.data: DataLoader
+    - torch.utils.tensorboard: SummaryWriter
+    - infer.lib.infer_pack: commons
+    - infer.lib.train.data_utils: DistributedBucketSampler, TextAudioCollate, TextAudioCollateMultiNSFsid, TextAudioLoader, TextAudioLoaderMultiNSFsid
+    - infer.lib.infer_pack.models: MultiPeriodDiscriminator, MultiPeriodDiscriminatorV2, SynthesizerTrnMs256NSFsid, SynthesizerTrnMs256NSFsid_nono, SynthesizerTrnMs768NSFsid, SynthesizerTrnMs768NSFsid_nono
+    - infer.lib.train.losses: discriminator_loss, feature_loss, generator_loss, kl_loss
+    - infer.lib.train.mel_processing: mel_spectrogram_torch, spec_to_mel_torch
+    - infer.lib.train.process_ckpt: savee
+  Function Calls:
+    - DDP
+    - DataLoader
+    - DistributedBucketSampler
+    - EpochRecorder
+    - F.l1_loss
+    - GradScaler
+    - MultiPeriodDiscriminator
+    - RVC_Model_f0
+    - RVC_Model_nof0
+    - SummaryWriter
+    - TextAudioCollate
+    - TextAudioCollateMultiNSFsid
+    - TextAudioLoader
+    - TextAudioLoaderMultiNSFsid
+    - autocast
+    - backward
+    - cache.append
+    - children.append
+    - commons.clip_grad_value_
+    - commons.slice_segments
+    - data.cpu
+    - datetime.datetime.now
+    - datetime.timedelta
+    - discriminator_loss
+    - dist.init_process_group
+    - enumerate
+    - epoch_recorder.record
+    - feature_loss
+    - format
+    - generator_loss
+    - gradscaler_init
+    - hasattr
+    - hps.gpus.replace
+    - hps.gpus.split
+    - ipex_init
+    - join
+    - kl_loss
+    - len
+    - logger.info
+    - logging.getLogger
+    - main
+    - mel_spectrogram_torch
+    - mp.Process
+    - net_d
+    - net_d.cuda
+    - net_d.load_state_dict
+    - net_d.module.load_state_dict
+    - net_d.parameters
+    - net_d.train
+    - net_g
+    - net_g.cuda
+    - net_g.load_state_dict
+    - net_g.module.load_state_dict
+    - net_g.module.state_dict
+    - net_g.parameters
+    - net_g.state_dict
+    - net_g.train
+    - numpy
+    - optim_d.zero_grad
+    - optim_g.zero_grad
+    - os._exit
+    - os.getcwd
+    - os.path.join
+    - phone.cuda
+    - phone_lengths.cuda
+    - pitch.cuda
+    - pitchf.cuda
+    - print
+    - randint
+    - range
+    - savee
+    - scalar_dict.update
+    - scaler.scale
+    - scaler.step
+    - scaler.unscale_
+    - scaler.update
+    - scheduler_d.step
+    - scheduler_g.step
+    - shuffle
+    - sid.cuda
+    - sleep
+    - spec.cuda
+    - spec_lengths.cuda
+    - spec_to_mel_torch
+    - squeeze
+    - str
+    - strftime
+    - subproc.start
+    - sys.path.append
+    - torch.backends.mps.is_available
+    - torch.cuda.device_count
+    - torch.cuda.is_available
+    - torch.cuda.set_device
+    - torch.load
+    - torch.manual_seed
+    - torch.multiprocessing.set_start_method
+    - torch.optim.AdamW
+    - torch.optim.lr_scheduler.ExponentialLR
+    - torch.xpu.is_available
+    - train_and_evaluate
+    - train_loader.batch_sampler.set_epoch
+    - ttime
+    - utils.get_hparams
+    - utils.get_logger
+    - utils.latest_checkpoint_path
+    - utils.load_checkpoint
+    - utils.plot_spectrogram_to_numpy
+    - utils.save_checkpoint
+    - utils.summarize
+    - wave.cuda
+    - wave_lengths.cuda
+    - y_hat.detach
+    - y_hat.float
+    - y_hat_mel.half
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\extract\extract_f0_print.py
+  Imports:
+    - logging
+    - numpy
+    - os
+    - parselmouth
+    - pyworld
+    - sys
+    - traceback
+  From Imports:
+    - infer.lib.audio: load_audio
+    - multiprocessing: Process
+    - infer.lib.rmvpe: RMVPE
+  Function Calls:
+    - FeatureInput
+    - Process
+    - RMVPE
+    - astype
+    - enumerate
+    - f.flush
+    - f.write
+    - f0_coarse.max
+    - f0_coarse.min
+    - hasattr
+    - int
+    - join
+    - len
+    - list
+    - load_audio
+    - logging.getLogger
+    - max
+    - np.log
+    - np.pad
+    - np.rint
+    - np.save
+    - open
+    - os.getcwd
+    - os.listdir
+    - os.makedirs
+    - os.path.exists
+    - p.start
+    - parselmouth.Sound
+    - paths.append
+    - print
+    - printt
+    - ps.append
+    - pyworld.dio
+    - pyworld.harvest
+    - pyworld.stonemask
+    - range
+    - self.coarse_f0
+    - self.compute_f0
+    - self.model_rmvpe.infer_from_audio
+    - setLevel
+    - sorted
+    - sys.path.append
+    - to_pitch_ac
+    - traceback.format_exc
+    - x.astype
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\extract\extract_f0_rmvpe.py
+  Imports:
+    - logging
+    - numpy
+    - os
+    - parselmouth
+    - pyworld
+    - sys
+    - traceback
+  From Imports:
+    - infer.lib.audio: load_audio
+    - infer.lib.rmvpe: RMVPE
+  Function Calls:
+    - FeatureInput
+    - RMVPE
+    - astype
+    - enumerate
+    - f.flush
+    - f.write
+    - f0_coarse.max
+    - f0_coarse.min
+    - featureInput.go
+    - hasattr
+    - int
+    - join
+    - len
+    - list
+    - load_audio
+    - logging.getLogger
+    - max
+    - np.log
+    - np.rint
+    - np.save
+    - open
+    - os.getcwd
+    - os.listdir
+    - os.makedirs
+    - os.path.exists
+    - paths.append
+    - print
+    - printt
+    - self.coarse_f0
+    - self.compute_f0
+    - self.model_rmvpe.infer_from_audio
+    - setLevel
+    - sorted
+    - str
+    - sys.path.append
+    - traceback.format_exc
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\train\extract\extract_f0_rmvpe_dml.py
+  Imports:
+    - logging
+    - numpy
+    - os
+    - parselmouth
+    - pyworld
+    - sys
+    - torch_directml
+    - traceback
+  From Imports:
+    - infer.lib.audio: load_audio
+    - infer.lib.rmvpe: RMVPE
+  Function Calls:
+    - FeatureInput
+    - RMVPE
+    - astype
+    - enumerate
+    - f.flush
+    - f.write
+    - f0_coarse.max
+    - f0_coarse.min
+    - featureInput.go
+    - hasattr
+    - join
+    - len
+    - list
+    - load_audio
+    - logging.getLogger
+    - max
+    - np.log
+    - np.rint
+    - np.save
+    - open
+    - os.getcwd
+    - os.listdir
+    - os.makedirs
+    - os.path.exists
+    - paths.append
+    - print
+    - printt
+    - self.coarse_f0
+    - self.compute_f0
+    - self.model_rmvpe.infer_from_audio
+    - setLevel
+    - sorted
+    - sys.path.append
+    - torch_directml.default_device
+    - torch_directml.device
+    - traceback.format_exc
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\uvr5\mdxnet.py
+  Imports:
+    - librosa
+    - logging
+    - numpy
+    - onnxruntime
+    - os
+    - soundfile
+    - torch
+  From Imports:
+    - tqdm: tqdm
+  Function Calls:
+    - ConvTDFNetTrim
+    - Predictor
+    - __init__
+    - _ort.run
+    - chunked_sources.append
+    - copy
+    - get_models
+    - len
+    - librosa.load
+    - list
+    - logger.info
+    - logging.getLogger
+    - min
+    - mix_waves.append
+    - mixes.keys
+    - model.istft
+    - model.stft
+    - np.array
+    - np.asfortranarray
+    - np.concatenate
+    - np.zeros
+    - numpy
+    - ort.InferenceSession
+    - ort.get_available_providers
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - os.remove
+    - os.system
+    - progress_bar.close
+    - progress_bar.set_description
+    - progress_bar.update
+    - range
+    - reshape
+    - self.demix
+    - self.demix_base
+    - self.freq_pad.repeat
+    - self.pred.prediction
+    - sf.write
+    - sources.append
+    - spek.cpu
+    - super
+    - to
+    - torch.cat
+    - torch.device
+    - torch.hann_window
+    - torch.istft
+    - torch.no_grad
+    - torch.stft
+    - torch.tensor
+    - torch.view_as_complex
+    - torch.view_as_real
+    - torch.zeros
+    - tqdm
+    - transpose
+    - x.contiguous
+    - x.permute
+    - x.reshape
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\uvr5\vr.py
+  Imports:
+    - librosa
+    - logging
+    - numpy
+    - os
+    - soundfile
+    - torch
+  From Imports:
+    - infer.lib.uvr5_pack.lib_v5: nets_61968KB, spec_utils
+    - infer.lib.uvr5_pack.lib_v5.model_param_init: ModelParameters
+    - infer.lib.uvr5_pack.lib_v5.nets_new: CascadedNet
+    - infer.lib.uvr5_pack.utils: inference
+  Function Calls:
+    - CascadedNet
+    - ModelParameters
+    - Nets.CascadedASPPNet
+    - astype
+    - float
+    - format
+    - inference
+    - len
+    - librosa.load
+    - librosa.resample
+    - logger.info
+    - logging.getLogger
+    - model.eval
+    - model.half
+    - model.load_state_dict
+    - model.to
+    - np.array
+    - np.asfortranarray
+    - np.clip
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - os.remove
+    - os.system
+    - range
+    - sf.write
+    - spec_utils.cmb_spectrogram_to_wave
+    - spec_utils.combine_spectrograms
+    - spec_utils.mask_silence
+    - spec_utils.mirroring
+    - spec_utils.wave_to_spectrogram_mt
+    - startswith
+    - to
+    - torch.load
+    - torch.no_grad
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\vc\modules.py
+  Imports:
+    - logging
+    - numpy
+    - soundfile
+    - torch
+    - traceback
+  From Imports:
+    - io: BytesIO
+    - infer.lib.audio: load_audio, wav2
+    - infer.lib.infer_pack.models: SynthesizerTrnMs256NSFsid, SynthesizerTrnMs256NSFsid_nono, SynthesizerTrnMs768NSFsid, SynthesizerTrnMs768NSFsid_nono
+    - infer.modules.vc.pipeline: Pipeline
+    - infer.modules.vc.utils: *
+  Function Calls:
+    - BytesIO
+    - Pipeline
+    - SynthesizerTrnMs256NSFsid
+    - SynthesizerTrnMs256NSFsid_nono
+    - SynthesizerTrnMs768NSFsid
+    - SynthesizerTrnMs768NSFsid_nono
+    - dir_path.strip
+    - file_index.strip
+    - get_index_path_from_model
+    - infos.append
+    - int
+    - join
+    - load_audio
+    - load_hubert
+    - logger.info
+    - logger.warning
+    - logging.getLogger
+    - max
+    - np.abs
+    - open
+    - opt_root.strip
+    - os.getenv
+    - os.listdir
+    - os.makedirs
+    - os.path.basename
+    - os.path.exists
+    - os.path.join
+    - replace
+    - self.cpt.get
+    - self.net_g.eval
+    - self.net_g.float
+    - self.net_g.half
+    - self.net_g.load_state_dict
+    - self.pipeline.pipeline
+    - self.vc_single
+    - sf.write
+    - strip
+    - synthesizer_class.get
+    - to
+    - torch.cuda.empty_cache
+    - torch.cuda.is_available
+    - torch.load
+    - traceback.format_exc
+    - traceback.print_exc
+    - wav2
+    - wavf.seek
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\vc\pipeline.py
+  Imports:
+    - faiss
+    - librosa
+    - logging
+    - numpy
+    - os
+    - parselmouth
+    - pyworld
+    - sys
+    - torch
+    - torch.nn.functional
+    - torchcrepe
+    - traceback
+  From Imports:
+    - functools: lru_cache
+    - time: time
+    - scipy: signal
+    - infer.lib.rmvpe: RMVPE
+  Function Calls:
+    - F.interpolate
+    - RMVPE
+    - astype
+    - audio_opt.append
+    - cache_harvest_f0
+    - change_rms
+    - cpu
+    - data.cpu
+    - f.read
+    - f0.copy
+    - faiss.read_index
+    - feats.clone
+    - feats.dim
+    - feats.float
+    - feats.half
+    - feats.mean
+    - feats.permute
+    - feats.to
+    - feats.view
+    - feats0.permute
+    - fill_
+    - float
+    - hasattr
+    - index.reconstruct_n
+    - index.search
+    - inp_f0.append
+    - isinstance
+    - len
+    - librosa.feature.rms
+    - librosa.resample
+    - line.split
+    - list
+    - logger.info
+    - logging.getLogger
+    - long
+    - max
+    - min
+    - model.extract_features
+    - model.final_proj
+    - net_g.infer
+    - np.abs
+    - np.array
+    - np.concatenate
+    - np.copy
+    - np.expand_dims
+    - np.interp
+    - np.log
+    - np.pad
+    - np.rint
+    - np.round
+    - np.square
+    - np.sum
+    - np.where
+    - np.zeros_like
+    - npy.astype
+    - numpy
+    - open
+    - opt_ts.append
+    - os.getcwd
+    - os.path.exists
+    - parselmouth.Sound
+    - permute
+    - pitchf.astype
+    - pitchf.clone
+    - pitchff.unsqueeze
+    - pow
+    - print
+    - pyworld.harvest
+    - pyworld.stonemask
+    - range
+    - rms1.unsqueeze
+    - rms2.unsqueeze
+    - self.get_f0
+    - self.model_rmvpe.infer_from_audio
+    - self.vc
+    - signal.butter
+    - signal.filtfilt
+    - signal.medfilt
+    - split
+    - squeeze
+    - str
+    - strip
+    - sys.path.append
+    - to
+    - to_pitch_ac
+    - torch.BoolTensor
+    - torch.cuda.empty_cache
+    - torch.cuda.is_available
+    - torch.from_numpy
+    - torch.max
+    - torch.no_grad
+    - torch.pow
+    - torch.tensor
+    - torch.zeros_like
+    - torchcrepe.filter.mean
+    - torchcrepe.filter.median
+    - torchcrepe.predict
+    - traceback.print_exc
+    - ttime
+    - type
+    - unsqueeze
+    - weight.sum
+    - x.astype
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\vc\utils.py
+  Imports:
+    - os
+  From Imports:
+    - fairseq: checkpoint_utils
+  Function Calls:
+    - checkpoint_utils.load_model_ensemble_and_task
+    - hubert_model.eval
+    - hubert_model.float
+    - hubert_model.half
+    - hubert_model.to
+    - name.endswith
+    - next
+    - os.getenv
+    - os.path.join
+    - os.walk
+    - sid.split
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\infer\modules\vc\__init__.py
+  Imports:
+  From Imports:
+  Function Calls:
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\temp_tools\analize_deps.py
+  Imports:
+    - ast
+    - os
+  From Imports:
+    - collections: defaultdict
+  Function Calls:
+    - CodeAnalyzer
+    - add
+    - analyzer.from_imports.items
+    - analyzer.visit
+    - ast.parse
+    - defaultdict
+    - f.read
+    - f.write
+    - filename.endswith
+    - isinstance
+    - items
+    - join
+    - open
+    - os.getcwd
+    - os.path.join
+    - os.walk
+    - print
+    - process_directory
+    - process_file
+    - self.function_calls.add
+    - self.generic_visit
+    - self.get_call_name
+    - self.imports.add
+    - set
+    - sorted
+    - summary.items
+    - write_summary
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\temp_tools\clean_i18n.py
+  Imports:
+    - os
+    - re
+  From Imports:
+  Function Calls:
+    - f.read
+    - f.write
+    - m.group
+    - open
+    - os.getcwd
+    - os.path.join
+    - os.walk
+    - pattern.sub
+    - print
+    - process_directory
+    - process_file
+    - re.compile
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\temp_tools\remap_i18n.py
+  Imports:
+    - json
+    - os
+  From Imports:
+  Function Calls:
+    - f.read
+    - f.write
+    - json.load
+    - len
+    - load_mapping
+    - mapping.items
+    - new_content.replace
+    - open
+    - os.getcwd
+    - os.path.abspath
+    - os.path.exists
+    - os.path.join
+    - os.walk
+    - print
+    - process_directory
+    - process_file
+    - sorted
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\app.py
+  Imports:
+    - gradio
+    - logging
+    - os
+  From Imports:
+    - dotenv: load_dotenv
+    - configs.config: Config
+    - infer.modules.vc.modules: VC
+  Function Calls:
+    - Config
+    - VC
+    - app.launch
+    - but0.click
+    - gr.Audio
+    - gr.Blocks
+    - gr.Button
+    - gr.Column
+    - gr.Dropdown
+    - gr.File
+    - gr.Markdown
+    - gr.Number
+    - gr.Radio
+    - gr.Slider
+    - gr.TabItem
+    - gr.Tabs
+    - gr.Textbox
+    - index_paths.append
+    - load_dotenv
+    - logging.getLogger
+    - name.endswith
+    - names.append
+    - os.getenv
+    - os.listdir
+    - os.walk
+    - setLevel
+    - sid.change
+    - sorted
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\calc_rvc_model_similarity.py
+  Imports:
+    - hashlib
+    - logging
+    - os
+    - torch
+    - torch.nn
+    - torch.nn.functional
+  From Imports:
+  Function Calls:
+    - F.softmax
+    - attn_to_k
+    - attn_to_k.load_state_dict
+    - attn_to_q
+    - attn_to_q.load_state_dict
+    - attn_to_v
+    - attn_to_v.load_state_dict
+    - cal_cross_attn
+    - eval
+    - file.read
+    - file.seek
+    - hashlib.sha256
+    - list
+    - logger.info
+    - logging.getLogger
+    - m.hexdigest
+    - m.update
+    - main
+    - model_hash
+    - nn.Linear
+    - open
+    - os.listdir
+    - range
+    - sims.append
+    - sorted
+    - torch.cosine_similarity
+    - torch.einsum
+    - torch.load
+    - torch.manual_seed
+    - torch.mean
+    - torch.randn
+    - torch.stack
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\download_assets.py
+  Imports:
+    - os
+    - requests
+  From Imports:
+    - pathlib: Path
+  Function Calls:
+    - Path
+    - dl_model
+    - f.write
+    - open
+    - os.makedirs
+    - os.path.dirname
+    - print
+    - r.iter_content
+    - r.raise_for_status
+    - requests.get
+    - resolve
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\download_model.py
+  Imports:
+    - argparse
+    - os
+    - requests
+    - shutil
+    - tempfile
+    - zipfile
+  From Imports:
+    - pathlib: Path
+  Function Calls:
+    - Path
+    - argparse.ArgumentParser
+    - download_file
+    - extract_and_move
+    - extracted_file.is_file
+    - f.write
+    - local_path.exists
+    - local_path.parent.mkdir
+    - logs_dir.mkdir
+    - main
+    - open
+    - parser.add_argument
+    - parser.parse_args
+    - print
+    - r.iter_content
+    - r.raise_for_status
+    - requests.get
+    - shutil.move
+    - str
+    - tempfile.TemporaryDirectory
+    - tmpdir.rglob
+    - weights_dir.mkdir
+    - zip_path.exists
+    - zip_path.unlink
+    - zip_ref.extractall
+    - zipfile.ZipFile
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\export_onnx.py
+  Imports:
+    - torch
+  From Imports:
+    - infer.lib.infer_pack.models_onnx: SynthesizerTrnMsNSFsidM
+  Function Calls:
+    - SynthesizerTrnMsNSFsidM
+    - long
+    - net_g.load_state_dict
+    - print
+    - test_ds.to
+    - test_phone.to
+    - test_phone_lengths.to
+    - test_pitch.to
+    - test_pitchf.to
+    - test_rnd.to
+    - torch.LongTensor
+    - torch.load
+    - torch.onnx.export
+    - torch.rand
+    - torch.randint
+    - torch.tensor
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer_batch_rvc.py
+  Imports:
+    - argparse
+    - os
+    - sys
+    - tqdm
+  From Imports:
+    - dotenv: load_dotenv
+    - scipy.io: wavfile
+    - configs.config: Config
+    - infer.modules.vc.modules: VC
+  Function Calls:
+    - Config
+    - VC
+    - arg_parse
+    - argparse.ArgumentParser
+    - file.endswith
+    - load_dotenv
+    - main
+    - os.getcwd
+    - os.listdir
+    - os.path.join
+    - parser.add_argument
+    - parser.parse_args
+    - print
+    - sys.path.append
+    - tq.tqdm
+    - vc.get_vc
+    - vc.vc_single
+    - wavfile.write
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer_cli.py
+  Imports:
+    - argparse
+    - os
+    - sys
+  From Imports:
+    - dotenv: load_dotenv
+    - scipy.io: wavfile
+    - configs.config: Config
+    - infer.modules.vc.modules: VC
+  Function Calls:
+    - Config
+    - VC
+    - arg_parse
+    - argparse.ArgumentParser
+    - load_dotenv
+    - main
+    - os.getcwd
+    - parser.add_argument
+    - parser.parse_args
+    - sys.path.append
+    - vc.get_vc
+    - vc.vc_single
+    - wavfile.write
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\onnx_inference_demo.py
+  Imports:
+    - soundfile
+  From Imports:
+    - infer.lib.infer_pack.onnx_inference: OnnxRVC
+  Function Calls:
+    - OnnxRVC
+    - model.inference
+    - soundfile.write
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer\infer-pm-index256.py
+  Imports:
+    - faiss
+    - librosa
+    - logging
+    - numpy
+    - os
+    - parselmouth
+    - soundfile
+    - torch
+    - torch.nn.functional
+  From Imports:
+    - time: time
+    - fairseq: checkpoint_utils
+    - infer.lib.infer_pack.models: SynthesizerTrnMs256NSFsid
+    - scipy.io: wavfile
+  Function Calls:
+    - F.interpolate
+    - I.squeeze
+    - SynthesizerTrn256
+    - astype
+    - audio.transpose
+    - checkpoint_utils.load_model_ensemble_and_task
+    - cpu
+    - data.cpu
+    - enumerate
+    - f0.copy
+    - faiss.read_index
+    - feats.dim
+    - feats.half
+    - feats.mean
+    - feats.permute
+    - feats.view
+    - fill_
+    - float
+    - format
+    - get_f0
+    - index.search
+    - len
+    - librosa.resample
+    - librosa.to_mono
+    - logger.debug
+    - logger.info
+    - logging.getLogger
+    - min
+    - model.eval
+    - model.extract_features
+    - model.final_proj
+    - model.half
+    - model.to
+    - net_g.eval
+    - net_g.half
+    - net_g.infer
+    - net_g.load_state_dict
+    - np.load
+    - np.log
+    - np.pad
+    - np.rint
+    - numpy
+    - padding_mask.to
+    - parselmouth.Sound
+    - permute
+    - pow
+    - sf.read
+    - to
+    - to_pitch_ac
+    - torch.BoolTensor
+    - torch.FloatTensor
+    - torch.LongTensor
+    - torch.cuda.is_available
+    - torch.cuda.synchronize
+    - torch.device
+    - torch.from_numpy
+    - torch.load
+    - torch.no_grad
+    - ttime
+    - unsqueeze
+    - wavfile.write
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer\train-index-v2.py
+  Imports:
+    - faiss
+    - logging
+    - numpy
+    - os
+    - traceback
+  From Imports:
+    - multiprocessing: cpu_count
+    - sklearn.cluster: MiniBatchKMeans
+  Function Calls:
+    - MiniBatchKMeans
+    - cpu_count
+    - faiss.extract_index_ivf
+    - faiss.index_factory
+    - faiss.write_index
+    - fit
+    - index.add
+    - index.train
+    - int
+    - list
+    - logger.debug
+    - logger.info
+    - logger.warning
+    - logging.getLogger
+    - min
+    - np.arange
+    - np.concatenate
+    - np.load
+    - np.random.shuffle
+    - np.save
+    - np.sqrt
+    - npys.append
+    - os.listdir
+    - range
+    - sorted
+    - traceback.format_exc
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer\train-index.py
+  Imports:
+    - faiss
+    - logging
+    - numpy
+    - os
+  From Imports:
+  Function Calls:
+    - faiss.extract_index_ivf
+    - faiss.index_factory
+    - faiss.write_index
+    - index.add
+    - index.train
+    - list
+    - logger.debug
+    - logger.info
+    - logging.getLogger
+    - np.concatenate
+    - np.load
+    - np.save
+    - npys.append
+    - os.listdir
+    - sorted
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\infer\trans_weights.py
+  Imports:
+    - pdb
+    - torch
+  From Imports:
+  Function Calls:
+    - a.keys
+    - half
+    - torch.load
+    - torch.save
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\torchgate\torchgate.py
+  Imports:
+    - torch
+  From Imports:
+    - infer.lib.rmvpe: STFT
+    - torch.nn.functional: conv1d, conv2d
+    - typing: Optional, Union
+    - utils: amp_to_db, linspace, temperature_sigmoid
+  Function Calls:
+    - STFT
+    - ValueError
+    - X.abs
+    - X_abs.reshape
+    - __init__
+    - amp_to_db
+    - conv1d
+    - conv2d
+    - hasattr
+    - int
+    - linspace
+    - noise_thresh.unsqueeze
+    - self._generate_mask_smoothing_filter
+    - self._nonstationary_mask
+    - self._stationary_mask
+    - self.register_buffer
+    - self.smoothing_filter.to
+    - self.stft.inverse
+    - self.stft.transform
+    - sig_mask.float
+    - sig_mask.squeeze
+    - sig_mask.unsqueeze
+    - smoothing_filter.sum
+    - str
+    - super
+    - temperature_sigmoid
+    - to
+    - torch.cat
+    - torch.hann_window
+    - torch.istft
+    - torch.no_grad
+    - torch.ones
+    - torch.outer
+    - torch.std_mean
+    - torch.stft
+    - unsqueeze
+    - view
+    - y.to
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\torchgate\utils.py
+  Imports:
+    - torch
+  From Imports:
+    - torch.types: Number
+  Function Calls:
+    - torch.finfo
+    - torch.linspace
+    - torch.log10
+    - torch.max
+    - torch.no_grad
+    - torch.sigmoid
+    - unsqueeze
+    - x.abs
+    - x_db.max
+
+File: D:\Programming\AI_assistant_with_custom_voice\spark-rvc-inference-module\tools\torchgate\__init__.py
+  Imports:
+  From Imports:
+    - torchgate: TorchGate
+  Function Calls:
+
