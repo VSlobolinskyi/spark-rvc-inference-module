@@ -2,15 +2,10 @@
 import os
 import subprocess
 import sys
-import shutil
-import stat
 import requests
 from pathlib import Path
 
-###########################
-# Part 1: Clone Spark TTS #
-###########################
-
+# Part 1: Download Spark assets
 def run_command(command, error_message):
     try:
         subprocess.run(command, check=True)
@@ -19,7 +14,6 @@ def run_command(command, error_message):
         sys.exit(1)
 
 def clone_spark_tts():
-    # Create the directory spark/pretrained_models if it doesn't exist.
     spark_pretrained_dir = os.path.join("spark", "pretrained_models")
     os.makedirs(spark_pretrained_dir, exist_ok=True)
 
@@ -44,10 +38,7 @@ def clone_spark_tts():
     else:
         print(f"Directory '{clone_dir}' already exists. Skipping clone.")
 
-#############################
-# Part 2: Download RVC Assets #
-#############################
-
+# Part 2: Download RVC Assets
 def dl_model(link, model_name, dir_name):
     with requests.get(f"{link}{model_name}") as r:
         r.raise_for_status()
@@ -58,7 +49,6 @@ def dl_model(link, model_name, dir_name):
 
 def download_rvc_models():
     RVC_DOWNLOAD_LINK = "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/"
-    # Set BASE_DIR to the project root. If this script is in ./tools, we go one level up.
     BASE_DIR = Path(__file__).resolve().parent.parent
 
     def check_and_dl(link, model_name, dest_dir):
@@ -120,10 +110,6 @@ def download_rvc_models():
         check_and_dl(RVC_DOWNLOAD_LINK + "uvr5_weights/", model, rvc_models_dir)
 
     print("All models downloaded!")
-
-##########################
-# Main: Run both parts   #
-##########################
 
 def main():
     clone_spark_tts()

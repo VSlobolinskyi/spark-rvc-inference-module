@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 import gradio as gr
+import traceback
 from rvc_ui.initialization import now_dir, config, vc
 from rvc_ui.main import build_rvc_ui
-# from spark_ui.main import build_spark_ui
+from spark_ui.main import build_spark_ui
 
 def build_unified_ui():
-    # Build each sub-UI
     rvc_ui = build_rvc_ui()  # Returns a gr.Blocks instance for RVC WebUI
-    # spark_ui = build_spark_ui()  # Returns a gr.Blocks instance for Spark TTS
 
     with gr.Blocks(title="Unified Inference UI") as app:
         gr.Markdown("## Unified Inference UI: RVC WebUI and Spark TTS")
         with gr.Tabs():
             with gr.TabItem("RVC WebUI"):
-                # Render the RVC UI components
                 rvc_ui.render()
-            # with gr.TabItem("Spark TTS"):
-            #     # Render the Spark UI components
-            #     spark_ui.render()
+            with gr.TabItem("Spark TTS"):
+                # Instead of calling render() on the Spark UI object,
+                # we'll directly build it in this context
+                try:
+                    # Create the Spark UI directly in this tab's context
+                    build_spark_ui()
+                except Exception as e:
+                    gr.Markdown(f"Error building Spark TTS: {str(e)}")
+                    gr.Markdown(traceback.format_exc())
     return app
 
 
@@ -33,5 +37,3 @@ if __name__ == "__main__":
             server_port=config.listen_port,
             quiet=True,
         )
-
-
