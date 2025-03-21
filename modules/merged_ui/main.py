@@ -1,20 +1,15 @@
-import os
 import gradio as gr
-import torch
-from time import sleep
 
 # Import modules from your packages
-from rvc_ui.initialization import now_dir, config, vc
-from rvc_ui.main import build_rvc_ui, names, index_paths
-from spark_ui.main import build_spark_ui, initialize_model, run_tts
+from merged_ui.utils import generate_and_process_with_rvc, modified_get_vc
+from rvc_ui.initialization import config
+from rvc_ui.main import names, index_paths
 from spark.sparktts.utils.token_parser import LEVELS_MAP_UI
 
 def build_merged_ui():
-     # Initialize the Spark TTS model
-    model_dir = "spark/pretrained_models/Spark-TTS-0.5B"
-    device = 0
-    spark_model = initialize_model(model_dir, device=device)
-    
+    """
+    Build the combined TTS-RVC UI interface using Gradio
+    """
     # Create the UI
     with gr.Blocks(title="Unified TTS-RVC Pipeline") as app:
         gr.Markdown("## Voice Generation and Conversion Pipeline")
@@ -138,39 +133,7 @@ def build_merged_ui():
                     vc_output1 = gr.Textbox(label="Output information")
                     vc_output2 = gr.Audio(label="Final converted audio")
                 
-                # Function to handle combined TTS and RVC processing
-                def generate_and_process_with_rvc(
-                    text, prompt_text, prompt_wav_upload, prompt_wav_record,
-                    spk_item, vc_transform, f0method, 
-                    file_index1, file_index2, index_rate, filter_radius,
-                    resample_sr, rms_mix_rate, protect
-                ):
-                    # First generate TTS audio
-                    prompt_speech = prompt_wav_upload if prompt_wav_upload else prompt_wav_record
-                    prompt_text_clean = None if not prompt_text or len(prompt_text) < 2 else prompt_text
-                    
-                    tts_path = run_tts(
-                        text,
-                        spark_model,
-                        prompt_text=prompt_text_clean,
-                        prompt_speech=prompt_speech
-                    )
-                    
-                    # Make sure we have a TTS file to process
-                    if not tts_path or not os.path.exists(tts_path):
-                        return "Failed to generate TTS audio", None
-                    
-                    # Call RVC processing function
-                    f0_file = None  # We're not using an F0 curve file in this pipeline
-                    output_info, output_audio = vc.vc_single(
-                        spk_item, tts_path, vc_transform, f0_file, f0method,
-                        file_index1, file_index2, index_rate, filter_radius,
-                        resample_sr, rms_mix_rate, protect
-                    )
-                    
-                    return output_info, output_audio
-                
-                # Connect function to button
+                # Connect generate function to button
                 generate_with_rvc_button.click(
                     generate_and_process_with_rvc,
                     inputs=[
@@ -192,17 +155,9 @@ def build_merged_ui():
                     outputs=[vc_output1, vc_output2],
                 )
                 
-                def modified_get_vc(sid0_value, protect0_value):
-                    protect1_value = protect0_value
-                    outputs = vc.get_vc(sid0_value, protect0_value, protect1_value)
-                    
-                    if isinstance(outputs, tuple) and len(outputs) >= 3:
-                        return outputs[0], outputs[1], outputs[3]
-                    
-                    return 0, protect0_value, file_index2.choices[0] if file_index2.choices else ""
-                
+                # Connect modified_get_vc function for dropdown change
                 sid0.change(
-                    fn=modified_get_vc,
+                    fn=lambda sid0_val, protect0_val: modified_get_vc(sid0_val, protect0_val, file_index2),
                     inputs=[sid0, protect0],
                     outputs=[spk_item, protect0, file_index2],
                 )
