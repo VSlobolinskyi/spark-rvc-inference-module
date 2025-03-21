@@ -17,7 +17,7 @@ def build_merged_ui():
         with gr.Tabs():
             with gr.TabItem("TTS-to-RVC Pipeline"):
                 gr.Markdown("### Generate speech with Spark TTS and convert with RVC")
-                gr.Markdown("*Note: For multi-sentence text, each sentence will be processed separately and then combined.*")
+                gr.Markdown("*Note: For multi-sentence text, each sentence will be processed separately and streamed as it’s ready.*")
                 
                 # TTS Generation Section
                 with gr.Row():
@@ -131,9 +131,9 @@ def build_merged_ui():
                 
                 with gr.Row():
                     vc_output1 = gr.Textbox(label="Output information", lines=10)
-                    vc_output2 = gr.Audio(label="Final concatenated audio")
+                    vc_output2 = gr.Audio(label="Streaming concatenated audio", autoplay=True)
                 
-                # Connect generate function to button
+                # Connect generate function to button with streaming enabled
                 generate_with_rvc_button.click(
                     generate_and_process_with_rvc,
                     inputs=[
@@ -152,7 +152,7 @@ def build_merged_ui():
                         rms_mix_rate0,
                         protect0,
                     ],
-                    outputs=[vc_output1, vc_output2],
+                    outputs=[vc_output1, vc_output2]
                 )
                 
                 # Connect modified_get_vc function for dropdown change

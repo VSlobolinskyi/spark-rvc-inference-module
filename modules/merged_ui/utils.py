@@ -218,7 +218,7 @@ def generate_and_process_with_rvc(
     resample_sr, rms_mix_rate, protect
 ):
     """
-    Handle combined TTS and RVC processing for multiple sentences and save outputs to TEMP directories
+    Handle combined TTS and RVC processing for multiple sentences and yield outputs as they are processed.
     """
     # Ensure TEMP directories exist
     os.makedirs("./TEMP/spark", exist_ok=True)
@@ -227,7 +227,8 @@ def generate_and_process_with_rvc(
     # Split text into sentences
     sentences = split_into_sentences(text)
     if not sentences:
-        return "No valid text to process.", None
+        yield "No valid text to process.", None
+        return
     
     # Get next base fragment number
     base_fragment_num = 1
@@ -240,10 +241,12 @@ def generate_and_process_with_rvc(
     prompt_speech = prompt_wav_upload if prompt_wav_upload else prompt_wav_record
     prompt_text_clean = None if not prompt_text or len(prompt_text) < 2 else prompt_text
     
-    # Process each sentence
-    results = []
     info_messages = [f"Processing {len(sentences)} sentences..."]
+    results = []
     
+    # Yield initial message with no audio yet
+    yield "\n".join(info_messages), None
+
     for i, sentence in enumerate(sentences):
         spark_path, rvc_path, success, info = process_single_sentence(
             i, sentence, prompt_speech, prompt_text_clean,
@@ -256,22 +259,22 @@ def generate_and_process_with_rvc(
         info_messages.append(info)
         if success and rvc_path:
             results.append(rvc_path)
-    
-    # If no sentences were successfully processed
-    if not results:
-        return "\n".join(info_messages) + "\n\nNo sentences were successfully processed.", None
-    
-    # Concatenate all successful RVC fragments
-    final_output_path = f"./TEMP/final_output_{base_fragment_num}.wav"
-    concatenation_success = concatenate_audio_files(results, final_output_path)
-    
-    if concatenation_success:
-        info_messages.append(f"\nAll fragments concatenated successfully to: {final_output_path}")
-        return "\n".join(info_messages), final_output_path
-    else:
-        # If concatenation failed but we have at least one successful fragment, return the first one
-        info_messages.append(f"\nFailed to concatenate fragments. Returning first successful fragment.")
-        return "\n".join(info_messages), results[0]
+        
+        # Build partial concatenation from results so far if any fragment exists
+        if results:
+            partial_output_path = f"./TEMP/partial_output_{base_fragment_num}.wav"
+            concatenation_success = concatenate_audio_files(results, partial_output_path)
+            if not concatenation_success:
+                # Fallback: use the latest processed fragment
+                partial_output_path = results[-1]
+        else:
+            partial_output_path = None
+        
+        # Yield the current info and the partial audio so far
+        yield "\n".join(info_messages), partial_output_path
+
+    # Optionally, yield one final update (could be identical to the last yield)
+    yield "\n".join(info_messages), partial_output_path
 
 def modified_get_vc(sid0_value, protect0_value, file_index2_component):
     """
