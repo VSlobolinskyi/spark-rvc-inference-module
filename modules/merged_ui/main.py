@@ -1,7 +1,8 @@
 import gradio as gr
 
 # Import modules from your packages
-from merged_ui.utils import generate_and_process_with_rvc_parallel, modified_get_vc
+from merged_ui.model_threading import generate_and_process_with_rvc_parallel
+from merged_ui.utils import modified_get_vc
 from rvc_ui.initialization import config
 from rvc_ui.main import names, index_paths
 
