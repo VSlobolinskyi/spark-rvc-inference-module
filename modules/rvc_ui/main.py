@@ -38,7 +38,7 @@ F0GPUVisible = config.dml == False
 
 # Build Gradio UI
 def build_rvc_ui():
-    with gr.Blocks(title="RVC WebUI") as rvc_ui:
+    with gr.Blocks(title="RVC WebUI") as app:
         gr.Markdown("## RVC WebUI")
         gr.Markdown(
             value="This software is open source under the MIT license. The author does not have any control over the software. Users who use the software and distribute the sounds exported by the software are solely responsible. <br>If you do not agree with this clause, you cannot use or reference any codes and files within the software package. See the root directory <b>Agreement-LICENSE.txt</b> for details."
@@ -326,7 +326,7 @@ def build_rvc_ui():
                         ],
                         api_name="infer_change_voice",
                     )
-        return rvc_ui
+        return app
 
 
 if __name__ == "__main__":

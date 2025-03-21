@@ -1,3 +1,4 @@
+# spark_ui/main.py
 import os
 import torch
 import soundfile as sf
@@ -120,7 +121,7 @@ def build_spark_ui():
         )
         return audio_output_path
 
-    with gr.Blocks() as demo:
+    with gr.Blocks() as app:
         # Use HTML for centered title
         gr.HTML('<h1 style="text-align: center;">Spark-TTS by SparkAudio</h1>')
         with gr.Tabs():
@@ -204,7 +205,7 @@ def build_spark_ui():
                     outputs=[audio_output],
                 )
 
-    return demo
+    return app
 
 if __name__ == "__main__":
     build_spark_ui()
