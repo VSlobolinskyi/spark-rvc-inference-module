@@ -11,6 +11,72 @@ from datetime import datetime
 from spark.cli.SparkTTS import SparkTTS
 from spark.sparktts.utils.token_parser import LEVELS_MAP_UI
 
+
+def initialize_model(model_dir, device):
+    """Load the model once at the beginning."""
+    logging.info(f"Loading model from: {model_dir}")
+
+    # Determine appropriate device based on platform and availability
+    if platform.system() == "Darwin":
+        # macOS with MPS support (Apple Silicon)
+        device = torch.device(f"mps:{device}")
+        logging.info(f"Using MPS device: {device}")
+    elif torch.cuda.is_available():
+        # System with CUDA support
+        device = torch.device(f"cuda:{device}")
+        logging.info(f"Using CUDA device: {device}")
+    else:
+        # Fall back to CPU
+        device = torch.device("cpu")
+        logging.info("GPU acceleration not available, using CPU")
+
+    model = SparkTTS(model_dir, device)
+    return model
+
+
+def run_tts(
+    text,
+    model,
+    prompt_text=None,
+    prompt_speech=None,
+    gender=None,
+    pitch=None,
+    speed=None,
+    save_dir="spark/example/results",
+):
+    """Perform TTS inference and save the generated audio."""
+    logging.info(f"Saving audio to: {save_dir}")
+
+    if prompt_text is not None:
+        prompt_text = None if len(prompt_text) <= 1 else prompt_text
+
+    # Ensure the save directory exists
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Generate unique filename using timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    save_path = os.path.join(save_dir, f"{timestamp}.wav")
+
+    logging.info("Starting inference...")
+
+    # Perform inference and save the output audio
+    with torch.no_grad():
+        wav = model.inference(
+            text,
+            prompt_speech,
+            prompt_text,
+            gender,
+            pitch,
+            speed,
+        )
+
+        sf.write(save_path, wav, samplerate=16000)
+
+    logging.info(f"Audio saved at: {save_path}")
+
+    return save_path
+
+
 def build_spark_ui():
     model_dir = "spark/pretrained_models/Spark-TTS-0.5B"
     device = 0
