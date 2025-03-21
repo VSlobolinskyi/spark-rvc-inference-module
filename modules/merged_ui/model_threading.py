@@ -15,16 +15,15 @@ device = 0
 
 class AudioBufferQueue:
     """
-    A buffer queue for audio file outputs that paces the release of files based on their duration.
-    This ensures each audio file has time to finish playing before the next one is released.
+    A buffer queue for audio file outputs that enforces strict sequential playback.
+    Files are played in the exact order they were added, with appropriate timing delays.
     """
     def __init__(self):
-        self.queue = []  # Queue to store (file_path, duration) tuples
-        self.current_file = None  # Currently playing file path
-        self.current_duration = 0  # Duration of currently playing file in seconds
-        self.start_time = None  # Start time for the current file
-        self.elapsed_time = 0  # Total elapsed playback time
-        self.last_check_time = None  # Last time we checked the timer
+        self.file_queue = []  # List of (file_path, duration) to be played in order
+        self.virtual_playback_time = 0  # Virtual timeline position (in seconds)
+        self.real_time_anchor = None  # Real-world timestamp corresponding to virtual_playback_time
+        self.current_file_idx = -1  # Index of current playing file in the queue (-1 means nothing playing)
+        self.last_returned_file = None  # Last file that was returned
     
     def add(self, file_path):
         """
@@ -40,15 +39,15 @@ class AudioBufferQueue:
                     duration = len(sound_file) / sound_file.samplerate
                 
                 # Add file to queue with its duration
-                self.queue.append((file_path, duration))
+                self.file_queue.append((file_path, duration))
                 logging.info(f"Added file to buffer queue: {file_path} (duration: {duration:.2f}s)")
             except Exception as e:
                 logging.error(f"Error getting audio duration: {str(e)}")
                 # If we can't get duration, use a default value
-                self.queue.append((file_path, 1.0))
+                self.file_queue.append((file_path, 1.0))
         else:
             # If file doesn't exist, add it with zero duration to pass through immediately
-            self.queue.append((file_path, 0))
+            self.file_queue.append((file_path, 0))
     
     def get_next(self):
         """
@@ -57,49 +56,64 @@ class AudioBufferQueue:
         Returns:
             str or None: The file path if ready, None otherwise
         """
-        current_time = time.time()
+        # Initialize the real-time anchor if this is the first call
+        if self.real_time_anchor is None:
+            self.real_time_anchor = time.time()
+            self.virtual_playback_time = 0
+            self.current_file_idx = -1  # No file playing yet
         
-        # Initialize timing if this is the first call
-        if self.last_check_time is None:
-            self.last_check_time = current_time
-            self.elapsed_time = 0
+        # Calculate the current virtual playback time based on elapsed real time
+        current_real_time = time.time()
+        elapsed_real_time = current_real_time - self.real_time_anchor
+        self.virtual_playback_time = elapsed_real_time
         
-        # Update elapsed time based on real clock
-        if self.last_check_time is not None:
-            time_since_last_check = current_time - self.last_check_time
-            self.elapsed_time += time_since_last_check
-            self.last_check_time = current_time
+        logging.debug(f"Virtual playback time: {self.virtual_playback_time:.2f}s")
         
-        # If we have a current file, check if its playback time has elapsed
-        if self.current_file is not None:
-            if self.elapsed_time < self.current_duration:
-                # Not enough time has passed, return None
+        # If we're already playing a file, check if it's finished
+        if self.current_file_idx >= 0:
+            # Get the duration of the current file
+            _, current_duration = self.file_queue[self.current_file_idx]
+            
+            # Calculate when this file should finish playing
+            file_end_time = sum(duration for _, duration in self.file_queue[:self.current_file_idx+1])
+            
+            # If the file isn't finished playing yet, return None
+            if self.virtual_playback_time < file_end_time:
+                remaining = file_end_time - self.virtual_playback_time
+                logging.debug(f"Current file still playing. Remaining: {remaining:.2f}s")
                 return None
             
-            logging.info(f"Finished playing {self.current_file} (duration: {self.current_duration:.2f}s)")
+            # If we get here, the current file is finished
+            logging.info(f"Finished playing {self.file_queue[self.current_file_idx][0]} " + 
+                         f"(duration: {current_duration:.2f}s)")
+        
+        # Find the next file to play
+        next_idx = self.current_file_idx + 1
+        
+        # If we have more files in the queue
+        if next_idx < len(self.file_queue):
+            next_file, next_duration = self.file_queue[next_idx]
             
-            # Reset current file but keep track of elapsed time
-            self.elapsed_time -= self.current_duration  # Subtract the duration we just played
-            self.current_file = None
+            # Update current file index
+            self.current_file_idx = next_idx
+            self.last_returned_file = next_file
+            
+            logging.info(f"Started playing {next_file} (duration: {next_duration:.2f}s)")
+            return next_file
         
-        # If we have files in the queue, get the next one
-        if self.queue:
-            file_path, duration = self.queue.pop(0)
-            self.current_file = file_path
-            self.current_duration = duration
-            logging.info(f"Started playing {file_path} (duration: {duration:.2f}s)")
-            return file_path
-        
+        # No more files to play
         return None
     
     def is_empty(self):
         """
-        Check if the queue is empty and there's no current file.
+        Check if the queue is empty and all files have been played.
         
         Returns:
             bool: True if empty, False otherwise
         """
-        return len(self.queue) == 0 and self.current_file is None
+        # Queue is empty when we've played all files
+        return len(self.file_queue) == 0 or (self.current_file_idx >= len(self.file_queue) - 1 and 
+                                           self.last_returned_file is not None)
 
 def generate_and_process_with_rvc_parallel(
     text, prompt_text, prompt_wav_upload, prompt_wav_record,
