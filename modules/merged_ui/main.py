@@ -4,7 +4,6 @@ import gradio as gr
 from merged_ui.utils import generate_and_process_with_rvc, modified_get_vc
 from rvc_ui.initialization import config
 from rvc_ui.main import names, index_paths
-from spark.sparktts.utils.token_parser import LEVELS_MAP_UI
 
 def build_merged_ui():
     """
@@ -18,6 +17,7 @@ def build_merged_ui():
         with gr.Tabs():
             with gr.TabItem("TTS-to-RVC Pipeline"):
                 gr.Markdown("### Generate speech with Spark TTS and convert with RVC")
+                gr.Markdown("*Note: For multi-sentence text, each sentence will be processed separately and then combined.*")
                 
                 # TTS Generation Section
                 with gr.Row():
@@ -36,7 +36,7 @@ def build_merged_ui():
                     tts_text_input = gr.Textbox(
                         label="Text to synthesize", 
                         lines=3, 
-                        placeholder="Enter text for TTS"
+                        placeholder="Enter text for TTS. Multiple sentences will be processed individually."
                     )
                     prompt_text_input = gr.Textbox(
                         label="Text of prompt speech (Optional)",
@@ -130,8 +130,8 @@ def build_merged_ui():
                 generate_with_rvc_button = gr.Button("Generate with RVC", variant="primary")
                 
                 with gr.Row():
-                    vc_output1 = gr.Textbox(label="Output information")
-                    vc_output2 = gr.Audio(label="Final converted audio")
+                    vc_output1 = gr.Textbox(label="Output information", lines=10)
+                    vc_output2 = gr.Audio(label="Final concatenated audio")
                 
                 # Connect generate function to button
                 generate_with_rvc_button.click(
