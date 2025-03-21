@@ -1,4 +1,5 @@
-from datetime import datetime
+import datetime
+import time
 import logging
 import os
 import platform
@@ -8,6 +9,7 @@ import numpy as np
 import soundfile as sf
 from pydub import AudioSegment
 import torch
+from pydub import AudioSegment
 
 # Import modules from your packages
 from spark.cli.SparkTTS import SparkTTS
@@ -219,6 +221,9 @@ def generate_and_process_with_rvc(
 ):
     """
     Handle combined TTS and RVC processing for multiple sentences and yield outputs as they are processed.
+    The output is just the latest processed audio.
+    Before yielding a new audio fragment, the function waits for the previous one to finish playing,
+    based on its duration.
     """
     # Ensure TEMP directories exist
     os.makedirs("./TEMP/spark", exist_ok=True)
@@ -242,10 +247,12 @@ def generate_and_process_with_rvc(
     prompt_text_clean = None if not prompt_text or len(prompt_text) < 2 else prompt_text
     
     info_messages = [f"Processing {len(sentences)} sentences..."]
-    results = []
     
     # Yield initial message with no audio yet
     yield "\n".join(info_messages), None
+
+    # Set up a timer to simulate playback duration
+    next_available_time = time.time()
 
     for i, sentence in enumerate(sentences):
         spark_path, rvc_path, success, info = process_single_sentence(
@@ -257,24 +264,23 @@ def generate_and_process_with_rvc(
         )
         
         info_messages.append(info)
+        # Only update output if processing was successful and we have an audio file
         if success and rvc_path:
-            results.append(rvc_path)
-        
-        # Build partial concatenation from results so far if any fragment exists
-        if results:
-            partial_output_path = f"./TEMP/partial_output_{base_fragment_num}.wav"
-            concatenation_success = concatenate_audio_files(results, partial_output_path)
-            if not concatenation_success:
-                # Fallback: use the latest processed fragment
-                partial_output_path = results[-1]
-        else:
-            partial_output_path = None
-        
-        # Yield the current info and the partial audio so far
-        yield "\n".join(info_messages), partial_output_path
+            try:
+                audio_seg = AudioSegment.from_file(rvc_path)
+                duration = audio_seg.duration_seconds
+            except Exception as e:
+                duration = 0
 
-    # Optionally, yield one final update (could be identical to the last yield)
-    yield "\n".join(info_messages), partial_output_path
+            current_time = time.time()
+            if current_time < next_available_time:
+                time.sleep(next_available_time - current_time)
+            
+            yield "\n".join(info_messages), rvc_path
+            
+            next_available_time = time.time() + duration
+
+    yield "\n".join(info_messages), rvc_path
 
 def modified_get_vc(sid0_value, protect0_value, file_index2_component):
     """
