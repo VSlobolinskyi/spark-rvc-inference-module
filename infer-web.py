@@ -20,11 +20,14 @@ def build_standalone_ui():
 if __name__ == "__main__":
     app = build_merged_ui()
     if config.iscolab:
-        app.queue().launch(share=True)
+        app.queue().launch(
+            share=True,
+            quiet=True
+        )
     else:
         app.queue().launch(
             server_name="localhost",
             inbrowser=not config.noautoopen,
             server_port=config.listen_port,
-            quiet=True,
+            quiet=True
         )
