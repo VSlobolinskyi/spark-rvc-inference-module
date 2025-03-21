@@ -1,7 +1,8 @@
 import gradio as gr
 
 # Import modules from your packages
-from merged_ui.utils import generate_and_process_with_rvc, modified_get_vc
+from merged_ui.utils import modified_get_vc
+from merged_ui.streaming_utils import generate_and_process_with_rvc_streaming
 from rvc_ui.initialization import config
 from rvc_ui.main import names, index_paths
 
@@ -17,7 +18,7 @@ def build_merged_ui():
         with gr.Tabs():
             with gr.TabItem("TTS-to-RVC Pipeline"):
                 gr.Markdown("### Generate speech with Spark TTS and convert with RVC")
-                gr.Markdown("*Note: For multi-sentence text, each sentence will be processed separately and then combined.*")
+                gr.Markdown("*Note: Sentences will begin playing as soon as the first one is ready*")
                 
                 # TTS Generation Section
                 with gr.Row():
@@ -130,12 +131,14 @@ def build_merged_ui():
                 generate_with_rvc_button = gr.Button("Generate with RVC", variant="primary")
                 
                 with gr.Row():
+                    # Status for updating information (will be updated during processing)
                     vc_output1 = gr.Textbox(label="Output information", lines=10)
-                    vc_output2 = gr.Audio(label="Final concatenated audio")
+                    # Streaming audio output to support incremental updates
+                    vc_output2 = gr.Audio(label="Audio (updates as sentences are processed)")
                 
-                # Connect generate function to button
+                # Connect generate function to button with streaming output
                 generate_with_rvc_button.click(
-                    generate_and_process_with_rvc,
+                    generate_and_process_with_rvc_streaming,
                     inputs=[
                         tts_text_input,
                         prompt_text_input,
