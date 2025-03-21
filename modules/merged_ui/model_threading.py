@@ -23,6 +23,8 @@ class AudioBufferQueue:
         self.current_file = None  # Currently playing file path
         self.current_duration = 0  # Duration of currently playing file in seconds
         self.start_time = None  # Start time for the current file
+        self.elapsed_time = 0  # Total elapsed playback time
+        self.last_check_time = None  # Last time we checked the timer
     
     def add(self, file_path):
         """
@@ -57,15 +59,27 @@ class AudioBufferQueue:
         """
         current_time = time.time()
         
+        # Initialize timing if this is the first call
+        if self.last_check_time is None:
+            self.last_check_time = current_time
+            self.elapsed_time = 0
+        
+        # Update elapsed time based on real clock
+        if self.last_check_time is not None:
+            time_since_last_check = current_time - self.last_check_time
+            self.elapsed_time += time_since_last_check
+            self.last_check_time = current_time
+        
         # If we have a current file, check if its playback time has elapsed
-        if self.current_file is not None and self.start_time is not None:
-            elapsed_time = current_time - self.start_time
-            if elapsed_time < self.current_duration:
+        if self.current_file is not None:
+            if self.elapsed_time < self.current_duration:
                 # Not enough time has passed, return None
                 return None
             
             logging.info(f"Finished playing {self.current_file} (duration: {self.current_duration:.2f}s)")
-            # Reset current file
+            
+            # Reset current file but keep track of elapsed time
+            self.elapsed_time -= self.current_duration  # Subtract the duration we just played
             self.current_file = None
         
         # If we have files in the queue, get the next one
@@ -73,7 +87,6 @@ class AudioBufferQueue:
             file_path, duration = self.queue.pop(0)
             self.current_file = file_path
             self.current_duration = duration
-            self.start_time = current_time
             logging.info(f"Started playing {file_path} (duration: {duration:.2f}s)")
             return file_path
         
