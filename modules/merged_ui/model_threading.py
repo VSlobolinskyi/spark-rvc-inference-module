@@ -53,7 +53,7 @@ def generate_and_process_with_rvc_parallel(
     file_index1, file_index2, index_rate, filter_radius,
     resample_sr, rms_mix_rate, protect,
     num_tts_workers=2, num_rvc_workers=1,
-    model_dir="path/to/model", device="0"  # example extra parameters
+    model_dir="spark/pretrained_models/Spark-TTS-0.5B", device="0"  # example extra parameters
 ):
     """
     Orchestrates combined TTS and RVC processing using multiple worker threads.
