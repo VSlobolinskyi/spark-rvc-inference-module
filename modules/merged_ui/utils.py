@@ -1,66 +1,78 @@
-import datetime
-import time
-import logging
 import os
-import platform
-import shutil
 import re
-import numpy as np
-import soundfile as sf
-from pydub import AudioSegment
-import torch
 import threading
-from queue import Queue, Empty
-from contextlib import nullcontext
+import logging
+from queue import Queue
+import torch
 
-# Import modules from your packages
-from spark.cli.SparkTTS import SparkTTS
+from merged_ui.buffer_queue import AudioBufferQueue
 from rvc_ui.initialization import vc
 
 # Initialize the Spark TTS model (moved outside function to avoid reinitializing)
 model_dir = "spark/pretrained_models/Spark-TTS-0.5B"
 device = 0
 
-def process_with_rvc(
-    spk_item, input_path, vc_transform, f0method,
-    file_index1, file_index2, index_rate, filter_radius,
-    resample_sr, rms_mix_rate, protect, 
-    output_path, cuda_stream=None
-):
-    """Process audio through RVC with a specific CUDA stream."""
-    logging.info(f"Starting RVC inference for {input_path}...")
-    
-    # Set the CUDA stream if provided
-    with torch.cuda.stream(cuda_stream) if cuda_stream and torch.cuda.is_available() else nullcontext():
-        # Call RVC processing function
-        f0_file = None  # We're not using an F0 curve file
-        output_info, output_audio = vc.vc_single(
-            spk_item, input_path, vc_transform, f0_file, f0method,
-            file_index1, file_index2, index_rate, filter_radius,
-            resample_sr, rms_mix_rate, protect
-        )
-    
-    # Save RVC output (CPU operation)
-    rvc_saved = False
-    try:
-        if isinstance(output_audio, str) and os.path.exists(output_audio):
-            # Case 1: output_audio is a file path string
-            shutil.copy2(output_audio, output_path)
-            rvc_saved = True
-        elif isinstance(output_audio, tuple) and len(output_audio) >= 2:
-            # Case 2: output_audio might be (sample_rate, audio_data)
-            sf.write(output_path, output_audio[1], output_audio[0])
-            rvc_saved = True
-        elif hasattr(output_audio, 'name') and os.path.exists(output_audio.name):
-            # Case 3: output_audio might be a file-like object
-            shutil.copy2(output_audio.name, output_path)
-            rvc_saved = True
-    except Exception as e:
-        output_info += f"\nError saving RVC output: {str(e)}"
-        
-    logging.info(f"RVC inference completed for {input_path}")
-    return rvc_saved, output_info
+def initialize_temp_dirs():
+    os.makedirs("./TEMP/spark", exist_ok=True)
+    os.makedirs("./TEMP/rvc", exist_ok=True)
 
+def prepare_audio_buffer():
+    return AudioBufferQueue()
+
+def split_text_and_validate(text):
+    sentences = split_into_sentences(text)
+    if not sentences:
+        raise ValueError("No valid text to process.")
+    return sentences
+
+def get_base_fragment_num(sentences):
+    base_fragment_num = 1
+    while any(
+        os.path.exists(f"./TEMP/spark/fragment_{base_fragment_num + i}.wav") or 
+        os.path.exists(f"./TEMP/rvc/fragment_{base_fragment_num + i}.wav")
+        for i in range(len(sentences))
+    ):
+        base_fragment_num += 1
+    return base_fragment_num
+
+def prepare_prompt(prompt_wav_upload, prompt_wav_record, prompt_text):
+    prompt_speech = prompt_wav_upload if prompt_wav_upload else prompt_wav_record
+    prompt_text_clean = None if not prompt_text or len(prompt_text) < 2 else prompt_text
+    return prompt_speech, prompt_text_clean
+
+def initialize_cuda_streams(num_tts_workers, num_rvc_workers):
+    use_cuda = torch.cuda.is_available()
+    if use_cuda:
+        tts_streams = [torch.cuda.Stream() for _ in range(num_tts_workers)]
+        rvc_streams = [torch.cuda.Stream() for _ in range(num_rvc_workers)]
+        logging.info(f"Using {num_tts_workers} CUDA streams for Spark TTS and {num_rvc_workers} for RVC")
+    else:
+        tts_streams = [None] * num_tts_workers
+        rvc_streams = [None] * num_rvc_workers
+        logging.info("CUDA not available, parallel processing will be limited")
+    return tts_streams, rvc_streams
+
+def create_queues_and_events(num_tts_workers, num_rvc_workers):
+    tts_to_rvc_queue = Queue()
+    rvc_results_queue = Queue()
+    tts_complete_events = [threading.Event() for _ in range(num_tts_workers)]
+    rvc_complete_events = [threading.Event() for _ in range(num_rvc_workers)]
+    processing_complete = threading.Event()
+    return tts_to_rvc_queue, rvc_results_queue, tts_complete_events, rvc_complete_events, processing_complete
+
+def create_sentence_batches(sentences, num_tts_workers):
+    sentence_batches = []
+    batch_size = len(sentences) // num_tts_workers
+    remainder = len(sentences) % num_tts_workers
+    start_idx = 0
+    for i in range(num_tts_workers):
+        current_batch_size = batch_size + (1 if i < remainder else 0)
+        end_idx = start_idx + current_batch_size
+        batch = sentences[start_idx:end_idx]
+        batch_indices = list(range(start_idx, end_idx))
+        sentence_batches.append((batch, batch_indices))
+        start_idx = end_idx
+    return sentence_batches
 
 def split_into_sentences(text):
     """
