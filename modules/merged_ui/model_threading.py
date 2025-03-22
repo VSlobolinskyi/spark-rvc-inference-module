@@ -15,8 +15,10 @@ device = 0
 
 class AudioBufferQueue:
     """
-    A buffer queue for audio file outputs that paces the release of files based on their duration.
-    This ensures each audio file has time to finish playing before the next one is released.
+    A buffer queue for audio file outputs that:
+    1. Maintains fragments in proper sequential order by fragment number
+    2. Paces the release of files based on their duration
+    This ensures files are played in the correct order regardless of generation timing.
     """
     def __init__(self, buffer_time=0.5):
         """
@@ -26,40 +28,99 @@ class AudioBufferQueue:
             buffer_time (float): Additional buffer time in seconds to add to each audio's playback
                                  to account for Gradio startup delay and ensure smooth transitions
         """
-        self.queue = []  # Queue to store (file_path, duration) tuples
+        self.queue = []  # Queue to store (fragment_num, file_path, duration) tuples
         self.current_file = None  # Currently playing file path
         self.current_duration = 0  # Duration of currently playing file in seconds
         self.playback_start_time = None  # When the current file started playing
         self.buffer_time = buffer_time  # Extra time to ensure complete playback
         self.min_playback_time = 1.0  # Minimum time to keep an audio playing, even if it's shorter
+        self.next_expected_fragment = None  # Track the next expected fragment number for sequential playback
+        
+    def _extract_fragment_number(self, file_path):
+        """
+        Extract the fragment number from a file path.
+        
+        Args:
+            file_path (str): Path to the audio file (format: "path/fragment_X.wav")
+            
+        Returns:
+            int: Fragment number or -1 if unable to extract
+        """
+        try:
+            # Extract the base filename without path
+            import os
+            base_name = os.path.basename(file_path)
+            
+            # Extract fragment number using string operations
+            if "fragment_" in base_name:
+                fragment_part = base_name.split("fragment_")[1]
+                fragment_num = int(fragment_part.split(".")[0])
+                return fragment_num
+            return -1
+        except Exception as e:
+            logging.error(f"Error extracting fragment number: {str(e)}")
+            return -1
         
     def add(self, file_path):
         """
-        Add a file to the buffer queue.
+        Add a file to the buffer queue in the correct sequential order.
         
         Args:
             file_path (str): Path to the audio file
         """
         if file_path and os.path.exists(file_path):
             try:
+                # Extract fragment number from filename
+                fragment_num = self._extract_fragment_number(file_path)
+                
                 # Get audio duration using soundfile
                 with sf.SoundFile(file_path) as sound_file:
                     duration = len(sound_file) / sound_file.samplerate
                 
-                # Add file to queue with its duration
-                self.queue.append((file_path, duration))
-                logging.info(f"Added file to buffer queue: {file_path} (duration: {duration:.2f}s)")
+                # Initialize next_expected_fragment if not set
+                if self.next_expected_fragment is None and fragment_num != -1:
+                    self.next_expected_fragment = fragment_num
+                
+                # Add file to queue with fragment number and duration
+                # We'll maintain the queue sorted by fragment number
+                entry = (fragment_num, file_path, duration)
+                
+                # Insert while maintaining sorted order
+                if not self.queue:
+                    self.queue.append(entry)
+                else:
+                    # Find insertion point to maintain sequential order
+                    insertion_index = 0
+                    for i, (existing_num, _, _) in enumerate(self.queue):
+                        if fragment_num < existing_num:
+                            insertion_index = i
+                            break
+                        else:
+                            insertion_index = i + 1
+                    
+                    # Insert at the proper position
+                    self.queue.insert(insertion_index, entry)
+                
+                logging.info(f"Added fragment {fragment_num} to buffer queue: {file_path} (duration: {duration:.2f}s)")
+                
+                # Debug the current queue order
+                queue_order = ", ".join([f"fragment_{num}" for num, _, _ in self.queue])
+                logging.info(f"Current queue order: {queue_order}")
+                
             except Exception as e:
-                logging.error(f"Error getting audio duration: {str(e)}")
-                # If we can't get duration, use a default value
-                self.queue.append((file_path, 2.0))  # More conservative default
+                logging.error(f"Error adding file to queue: {str(e)}")
+                # If we can't get duration, use a default value and add to end
+                fragment_num = self._extract_fragment_number(file_path)
+                self.queue.append((fragment_num, file_path, 2.0))  # More conservative default
         else:
-            # If file doesn't exist, add it with zero duration to pass through immediately
-            self.queue.append((file_path, 0))
+            # If file doesn't exist, add it with zero duration to pass through
+            fragment_num = self._extract_fragment_number(file_path) if file_path else -1
+            self.queue.append((fragment_num, file_path, 0))
     
     def get_next(self):
         """
         Get the next file from the queue if enough time has passed for the current file.
+        Returns the next file in sequential fragment order.
         
         Returns:
             str or None: The file path if ready, None otherwise
@@ -91,14 +152,20 @@ class AudioBufferQueue:
         
         # If we don't have a current file and there are files in the queue, get the next one
         if self.current_file is None and self.queue:
-            file_path, duration = self.queue.pop(0)
+            # The queue is already sorted by fragment number, so just take the first item
+            fragment_num, file_path, duration = self.queue.pop(0)
+            
+            # Update the next expected fragment
+            if fragment_num != -1:
+                self.next_expected_fragment = fragment_num + 1
+                
             self.current_file = file_path
             self.current_duration = duration
             self.playback_start_time = current_time
             
             # Calculate effective duration with buffer
             effective_duration = max(duration + self.buffer_time, self.min_playback_time)
-            logging.info(f"Started playing {file_path} " + 
+            logging.info(f"Started playing fragment {fragment_num}: {file_path} " + 
                          f"(duration: {duration:.2f}s, effective: {effective_duration:.2f}s)")
             return file_path
         
@@ -121,6 +188,7 @@ class AudioBufferQueue:
         self.queue = []
         self.current_file = None
         self.playback_start_time = None
+        self.next_expected_fragment = None
         logging.info("Audio buffer queue cleared")
 
 def generate_and_process_with_rvc_parallel(
