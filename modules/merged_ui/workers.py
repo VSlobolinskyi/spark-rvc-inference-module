@@ -7,7 +7,7 @@ from queue import Empty
 import torch
 import soundfile as sf
 
-from cli import SparkTTS
+from spark.cli.SparkTTS import SparkTTS
 from rvc_ui.initialization import vc
 
 def tts_worker(worker_id, sentences_batch, global_indices, cuda_stream, base_fragment_num,
