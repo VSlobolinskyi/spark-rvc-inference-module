@@ -100,11 +100,11 @@ def generate_and_process_with_rvc_parallel(
     spk_item, vc_transform, f0method, 
     file_index1, file_index2, index_rate, filter_radius,
     resample_sr, rms_mix_rate, protect,
-    num_tts_workers=2
+    num_tts_workers=2, num_rvc_workers=1
 ):
     """
-    Handle combined TTS and RVC processing using multiple TTS instances in parallel.
-    Uses a producer-consumer pattern where multiple TTS workers produce audio files for RVC to consume.
+    Handle combined TTS and RVC processing using multiple TTS and RVC instances in parallel.
+    Uses a producer-consumer pattern where multiple TTS workers produce audio files for multiple RVC workers to consume.
     Includes buffer queue for pacing output based on audio durations.
     """
     # Ensure TEMP directories exist
@@ -134,13 +134,13 @@ def generate_and_process_with_rvc_parallel(
     # Create CUDA streams if CUDA is available
     use_cuda = torch.cuda.is_available()
     if use_cuda:
-        # Create multiple TTS streams and one RVC stream
+        # Create multiple TTS streams and multiple RVC streams
         tts_streams = [torch.cuda.Stream() for _ in range(num_tts_workers)]
-        rvc_stream = torch.cuda.Stream()
-        logging.info(f"Using {num_tts_workers} CUDA streams for Spark TTS and 1 for RVC")
+        rvc_streams = [torch.cuda.Stream() for _ in range(num_rvc_workers)]  # Multiple RVC streams
+        logging.info(f"Using {num_tts_workers} CUDA streams for Spark TTS and {num_rvc_workers} for RVC")
     else:
         tts_streams = [None] * num_tts_workers
-        rvc_stream = None
+        rvc_streams = [None] * num_rvc_workers  # Placeholders when CUDA not available
         logging.info("CUDA not available, parallel processing will be limited")
     
     # Create queues for communication between TTS and RVC
@@ -149,9 +149,10 @@ def generate_and_process_with_rvc_parallel(
     
     # Flags to signal completion
     tts_complete = [threading.Event() for _ in range(num_tts_workers)]
+    rvc_complete = [threading.Event() for _ in range(num_rvc_workers)]  # Added for RVC workers
     processing_complete = threading.Event()
     
-    info_messages = [f"Processing {len(sentences)} sentences using {num_tts_workers} parallel TTS instances..."]
+    info_messages = [f"Processing {len(sentences)} sentences using {num_tts_workers} parallel TTS instances and {num_rvc_workers} RVC instances..."]
     
     # Yield initial message with no audio yet
     yield "\n".join(info_messages), None
@@ -225,16 +226,25 @@ def generate_and_process_with_rvc_parallel(
         logging.info(f"TTS Worker {worker_id}: Completed processing {len(sentences_batch)} sentences")
         tts_complete[worker_id].set()
         
-        # If all TTS workers are done, add the sentinel to the queue
+        # If all TTS workers are done, add sentinel values for each RVC worker
         if all(event.is_set() for event in tts_complete):
-            tts_to_rvc_queue.put(None)
+            for _ in range(num_rvc_workers):
+                tts_to_rvc_queue.put(None)  # One sentinel per RVC worker
     
-    # RVC worker function
-    def rvc_worker():
+    # Modified RVC worker function to support multiple instances
+    def rvc_worker(worker_id, cuda_stream):
+        logging.info(f"RVC Worker {worker_id}: Starting")
+        
         while True:
             # Get item from the queue
-            item = tts_to_rvc_queue.get()
-            
+            try:
+                item = tts_to_rvc_queue.get(timeout=0.5)  # Add timeout to check for completion
+            except Empty:
+                # If all TTS workers are done and the queue is empty, we might be done
+                if all(event.is_set() for event in tts_complete):
+                    break
+                continue
+                
             # Check for the sentinel value (None) that signals completion
             if item is None:
                 break
@@ -255,35 +265,42 @@ def generate_and_process_with_rvc_parallel(
             rvc_path = os.path.join("./TEMP/rvc", f"fragment_{fragment_num}.wav")
             
             try:
-                # Process with RVC
+                logging.info(f"RVC Worker {worker_id}: Processing fragment {fragment_num}")
+                
+                # Process with RVC using this worker's CUDA stream
                 rvc_success, rvc_info = process_with_rvc(
                     spk_item, tts_path, vc_transform, f0method,
                     file_index1, file_index2, index_rate, filter_radius,
                     resample_sr, rms_mix_rate, protect,
-                    rvc_path, cuda_stream=rvc_stream
+                    rvc_path, cuda_stream=cuda_stream
                 )
                 
                 # Create info message
                 info_message = f"Sentence {i+1}: {sentence[:30]}{'...' if len(sentence) > 30 else ''}\n"
                 info_message += f"  - Spark output: {tts_path}\n"
                 if rvc_success:
-                    info_message += f"  - RVC output: {rvc_path}"
+                    info_message += f"  - RVC output (Worker {worker_id}): {rvc_path}"
                 else:
                     info_message += f"  - Could not save RVC output to {rvc_path}"
                 
                 # Put the results to the queue
                 rvc_results_queue.put((i, tts_path, rvc_path if rvc_success else None, rvc_success, info_message))
             except Exception as e:
-                logging.error(f"RVC processing error for sentence {i}: {str(e)}")
+                logging.error(f"RVC Worker {worker_id} processing error for sentence {i}: {str(e)}")
                 info_message = f"Sentence {i+1}: {sentence[:30]}{'...' if len(sentence) > 30 else ''}\n"
                 info_message += f"  - Spark output: {tts_path}\n"
-                info_message += f"  - RVC processing error: {str(e)}"
+                info_message += f"  - RVC processing error (Worker {worker_id}): {str(e)}"
                 rvc_results_queue.put((i, tts_path, None, False, info_message))
-                
-        # Signal RVC completion
-        processing_complete.set()
+        
+        # Signal this RVC worker's completion
+        logging.info(f"RVC Worker {worker_id}: Completed")
+        rvc_complete[worker_id].set()
+        
+        # If all RVC workers are done, signal processing completion
+        if all(event.is_set() for event in rvc_complete):
+            processing_complete.set()
     
-    # Start multiple TTS worker threads and one RVC thread
+    # Start multiple TTS worker threads
     tts_threads = []
     for i in range(num_tts_workers):
         if sentence_batches[i][0]:  # Only start if there are sentences in this batch
@@ -297,17 +314,23 @@ def generate_and_process_with_rvc_parallel(
             # Mark this worker as complete if it has no work
             tts_complete[i].set()
     
-    rvc_thread = threading.Thread(target=rvc_worker)
-    rvc_thread.start()
+    # Start multiple RVC worker threads
+    rvc_threads = []
+    for i in range(num_rvc_workers):
+        thread = threading.Thread(
+            target=rvc_worker,
+            args=(i, rvc_streams[i])
+        )
+        rvc_threads.append(thread)
+        thread.start()
     
     # Process results as they become available
     completed_sentences = {}
     next_to_buffer = 0
-    last_yielded_idx = -1
     
     # Loop continues as long as processing is happening, buffer has items, or there are results to process
     while (not processing_complete.is_set() or not rvc_results_queue.empty() or not buffer.is_empty() 
-           or (completed_sentences and next_to_buffer <= max(completed_sentences.keys()))):
+           or (completed_sentences and next_to_buffer <= max(completed_sentences.keys(), default=-1))):
         try:
             # Try to get an item from the results queue with a timeout
             try:
@@ -336,7 +359,8 @@ def generate_and_process_with_rvc_parallel(
             if next_file:
                 # Yield the current state with the next file
                 yield "\n".join(info_messages), next_file
-                last_yielded_idx = list(completed_sentences.keys()).index(next_to_buffer - 1)
+                if completed_sentences:
+                    last_yielded_idx = list(completed_sentences.keys()).index(next_to_buffer - 1)
             else:
                 # No file ready yet, sleep briefly
                 time.sleep(0.1)
@@ -350,4 +374,6 @@ def generate_and_process_with_rvc_parallel(
     # Join the threads
     for thread in tts_threads:
         thread.join()
-    rvc_thread.join()
+    
+    for thread in rvc_threads:
+        thread.join()

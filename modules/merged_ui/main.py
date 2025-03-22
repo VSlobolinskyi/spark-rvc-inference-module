@@ -115,6 +115,22 @@ def build_merged_ui():
                             step=1,
                             interactive=True,
                         )
+                        rvc_workers = gr.Slider(
+                            minimum=1,
+                            maximum=8,
+                            label="Set the number of threads for RVC processing:",
+                            value=1,
+                            step=1,
+                            interactive=True,
+                        )
+                        spark_wokrers = gr.Slider(
+                            minimum=1,
+                            maximum=8,
+                            label="Set the number of threads for Spark TTS processing:",
+                            value=2,
+                            step=1,
+                            interactive=True,
+                        )
                 
                 # Speaker ID (hidden)
                 spk_item = gr.Slider(
@@ -152,6 +168,8 @@ def build_merged_ui():
                         resample_sr0,
                         rms_mix_rate0,
                         protect0,
+                        rvc_workers,
+                        spark_wokrers
                     ],
                     outputs=[vc_output1, vc_output2]
                 )
