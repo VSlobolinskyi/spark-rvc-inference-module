@@ -168,8 +168,8 @@ def build_merged_ui():
                         resample_sr0,
                         rms_mix_rate0,
                         protect0,
-                        rvc_workers,
-                        spark_wokrers
+                        spark_wokrers,
+                        rvc_workers
                     ],
                     outputs=[vc_output1, vc_output2]
                 )
