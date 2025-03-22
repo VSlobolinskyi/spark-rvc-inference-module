@@ -28,7 +28,7 @@ def process_results(sentences, rvc_results_queue, buffer, processing_complete):
                 
                 if success and rvc_path and os.path.exists(rvc_path):
                     # Add directly to the ordered buffer with its position
-                    buffer.add(rvc_path, i)
+                    buffer.add_with_position(rvc_path, i)
                     logging.info(f"Sentence {i+1} added to ordered buffer")
                 else:
                     logging.warning(f"Sentence {i+1} had no valid output file")

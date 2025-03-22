@@ -5,7 +5,7 @@ import logging
 from queue import Queue
 import torch
 
-from merged_ui.buffer_queue import AudioBufferQueue
+from merged_ui.buffer_queue import OrderedAudioBufferQueue
 from rvc_ui.initialization import vc
 
 # Initialize the Spark TTS model (moved outside function to avoid reinitializing)
@@ -16,8 +16,11 @@ def initialize_temp_dirs():
     os.makedirs("./TEMP/spark", exist_ok=True)
     os.makedirs("./TEMP/rvc", exist_ok=True)
 
-def prepare_audio_buffer():
-    return AudioBufferQueue()
+def prepare_audio_buffer(buffer_time=1.0):
+    """
+    Create and return an OrderedAudioBufferQueue for managing audio output order.
+    """
+    return OrderedAudioBufferQueue(buffer_time)
 
 def split_text_and_validate(text):
     sentences = split_into_sentences(text)
