@@ -18,7 +18,7 @@ class AudioBufferQueue:
     A buffer queue for audio file outputs that paces the release of files based on their duration.
     This ensures each audio file has time to finish playing before the next one is released.
     """
-    def __init__(self, buffer_time=1.5):
+    def __init__(self, buffer_time=0.5):
         """
         Initialize the buffer queue.
         
