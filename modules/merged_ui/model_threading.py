@@ -18,11 +18,20 @@ class AudioBufferQueue:
     A buffer queue for audio file outputs that paces the release of files based on their duration.
     This ensures each audio file has time to finish playing before the next one is released.
     """
-    def __init__(self):
+    def __init__(self, buffer_time=1.5):
+        """
+        Initialize the buffer queue.
+        
+        Args:
+            buffer_time (float): Additional buffer time in seconds to add to each audio's playback
+                                 to account for Gradio startup delay and ensure smooth transitions
+        """
         self.queue = []  # Queue to store (file_path, duration) tuples
         self.current_file = None  # Currently playing file path
         self.current_duration = 0  # Duration of currently playing file in seconds
         self.playback_start_time = None  # When the current file started playing
+        self.buffer_time = buffer_time  # Extra time to ensure complete playback
+        self.min_playback_time = 1.0  # Minimum time to keep an audio playing, even if it's shorter
         
     def add(self, file_path):
         """
@@ -43,7 +52,7 @@ class AudioBufferQueue:
             except Exception as e:
                 logging.error(f"Error getting audio duration: {str(e)}")
                 # If we can't get duration, use a default value
-                self.queue.append((file_path, 1.0))
+                self.queue.append((file_path, 2.0))  # More conservative default
         else:
             # If file doesn't exist, add it with zero duration to pass through immediately
             self.queue.append((file_path, 0))
@@ -60,18 +69,24 @@ class AudioBufferQueue:
         # If we're currently playing a file, check if it's finished based on real elapsed time
         if self.current_file is not None and self.playback_start_time is not None:
             elapsed_time = current_time - self.playback_start_time
-            time_remaining = self.current_duration - elapsed_time
+            
+            # Effective playback time includes buffer time for Gradio initialization
+            effective_duration = max(self.current_duration + self.buffer_time, self.min_playback_time)
+            time_remaining = effective_duration - elapsed_time
             
             # Debugging information
             logging.debug(f"Current file: {self.current_file}, Elapsed: {elapsed_time:.2f}s, " +
-                         f"Duration: {self.current_duration:.2f}s, Remaining: {time_remaining:.2f}s")
+                         f"Original Duration: {self.current_duration:.2f}s, " +
+                         f"Effective Duration: {effective_duration:.2f}s, " +
+                         f"Remaining: {time_remaining:.2f}s")
             
-            # If not enough time has passed (with a small buffer for processing delays)
-            if elapsed_time < (self.current_duration - 0.1):
+            # If not enough time has passed with the buffer
+            if elapsed_time < effective_duration:
                 return None
             
             # Log that the file has finished playing
-            logging.info(f"Finished playing {self.current_file} (duration: {self.current_duration:.2f}s)")
+            logging.info(f"Finished playing {self.current_file} " +
+                         f"(duration: {self.current_duration:.2f}s, effective: {effective_duration:.2f}s)")
             self.current_file = None
         
         # If we don't have a current file and there are files in the queue, get the next one
@@ -81,7 +96,10 @@ class AudioBufferQueue:
             self.current_duration = duration
             self.playback_start_time = current_time
             
-            logging.info(f"Started playing {file_path} (duration: {duration:.2f}s)")
+            # Calculate effective duration with buffer
+            effective_duration = max(duration + self.buffer_time, self.min_playback_time)
+            logging.info(f"Started playing {file_path} " + 
+                         f"(duration: {duration:.2f}s, effective: {effective_duration:.2f}s)")
             return file_path
         
         return None
@@ -94,6 +112,16 @@ class AudioBufferQueue:
             bool: True if empty, False otherwise
         """
         return len(self.queue) == 0 and self.current_file is None
+
+    def clear(self):
+        """
+        Clear the queue and stop tracking the current file.
+        Useful when wanting to immediately interrupt playback.
+        """
+        self.queue = []
+        self.current_file = None
+        self.playback_start_time = None
+        logging.info("Audio buffer queue cleared")
 
 def generate_and_process_with_rvc_parallel(
     text, prompt_text, prompt_wav_upload, prompt_wav_record,
