@@ -2,7 +2,7 @@ import os
 import re
 import threading
 import logging
-from queue import Queue
+from queue import PriorityQueue, Queue
 import torch
 
 from merged_ui.buffer_queue import OrderedAudioBufferQueue
@@ -63,19 +63,22 @@ def create_queues_and_events(num_tts_workers, num_rvc_workers):
     processing_complete = threading.Event()
     return tts_to_rvc_queue, rvc_results_queue, tts_complete_events, rvc_complete_events, processing_complete
 
-def create_sentence_batches(sentences, num_tts_workers):
-    sentence_batches = []
-    batch_size = len(sentences) // num_tts_workers
-    remainder = len(sentences) % num_tts_workers
-    start_idx = 0
-    for i in range(num_tts_workers):
-        current_batch_size = batch_size + (1 if i < remainder else 0)
-        end_idx = start_idx + current_batch_size
-        batch = sentences[start_idx:end_idx]
-        batch_indices = list(range(start_idx, end_idx))
-        sentence_batches.append((batch, batch_indices))
-        start_idx = end_idx
-    return sentence_batches
+def create_sentence_priority_queue(sentences):
+    """
+    Creates a priority queue of sentences, prioritized by their original order.
+    
+    Args:
+        sentences: List of sentences to process
+        
+    Returns:
+        A priority queue containing tuples of (priority, index, sentence)
+    """
+    sentence_queue = PriorityQueue()
+    for idx, sentence in enumerate(sentences):
+        # Use index as priority to maintain original order
+        sentence_queue.put((idx, idx, sentence))
+    
+    return sentence_queue, len(sentences)
 
 def split_into_sentences(text):
     """

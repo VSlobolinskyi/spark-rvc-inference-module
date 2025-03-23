@@ -10,9 +10,12 @@ import soundfile as sf
 from spark.cli.SparkTTS import SparkTTS
 from rvc_ui.initialization import vc
 
-def tts_worker(worker_id, sentences_batch, global_indices, cuda_stream, base_fragment_num,
-               prompt_speech, prompt_text_clean, tts_to_rvc_queue, tts_complete_events,
-               num_rvc_workers, model_dir, device):
+def tts_worker(worker_id, sentence_queue, sentence_count, queue_lock, processed_count, 
+               cuda_stream, base_fragment_num, prompt_speech, prompt_text_clean, 
+               tts_to_rvc_queue, tts_complete_events, num_rvc_workers, model_dir, device):
+    """
+    Modified TTS worker that pulls sentences from a shared priority queue.
+    """
     logging.info(f"TTS Worker {worker_id}: Initializing Spark TTS model")
     # Determine proper device based on platform and availability
     if platform.system() == "Darwin":
@@ -24,13 +27,24 @@ def tts_worker(worker_id, sentences_batch, global_indices, cuda_stream, base_fra
     
     tts_model = SparkTTS(model_dir, model_device)
     
-    for local_idx, (sentence, global_idx) in enumerate(zip(sentences_batch, global_indices)):
+    while True:
+        # Get next sentence from priority queue with thread safety
+        with queue_lock:
+            if sentence_queue.empty():
+                break
+            
+            priority, global_idx, sentence = sentence_queue.get()
+            with processed_count.get_lock():
+                processed_count.value += 1
+                current_count = processed_count.value
+        
         fragment_num = base_fragment_num + global_idx
         tts_filename = f"fragment_{fragment_num}.wav"
         save_path = os.path.join("./TEMP/spark", tts_filename)
         
+        logging.info(f"TTS Worker {worker_id}: Processing sentence {global_idx+1}/{sentence_count} (priority {priority}): {sentence[:30]}...")
+        
         try:
-            logging.info(f"TTS Worker {worker_id}: Processing text: {sentence[:30]}...")
             stream_ctx = torch.cuda.stream(cuda_stream) if cuda_stream and torch.cuda.is_available() else nullcontext()
             with stream_ctx:
                 with torch.no_grad():
@@ -49,7 +63,7 @@ def tts_worker(worker_id, sentences_batch, global_indices, cuda_stream, base_fra
             logging.error(f"TTS Worker {worker_id} error for sentence {global_idx}: {str(e)}")
             tts_to_rvc_queue.put((global_idx, fragment_num, sentence, None, str(e)))
     
-    logging.info(f"TTS Worker {worker_id}: Completed processing {len(sentences_batch)} sentences")
+    logging.info(f"TTS Worker {worker_id}: Completed processing sentences")
     tts_complete_events[worker_id].set()
     
     # If all TTS workers are done, add sentinel values for each RVC worker.

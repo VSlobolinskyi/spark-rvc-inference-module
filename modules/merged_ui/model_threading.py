@@ -1,8 +1,9 @@
+import multiprocessing
 import time
 import logging
 import os
 import threading
-from merged_ui.utils import create_queues_and_events, create_sentence_batches, get_base_fragment_num, initialize_cuda_streams, initialize_temp_dirs, prepare_audio_buffer, prepare_prompt, split_text_and_validate
+from merged_ui.utils import create_queues_and_events, create_sentence_priority_queue, get_base_fragment_num, initialize_cuda_streams, initialize_temp_dirs, prepare_audio_buffer, prepare_prompt, split_text_and_validate
 from merged_ui.workers import rvc_worker, tts_worker
 
 def process_results(sentences, rvc_results_queue, buffer, processing_complete):
@@ -53,10 +54,10 @@ def generate_and_process_with_rvc_parallel(
     file_index1, file_index2, index_rate, filter_radius,
     resample_sr, rms_mix_rate, protect,
     num_tts_workers=2, num_rvc_workers=1,
-    model_dir="spark/pretrained_models/Spark-TTS-0.5B", device="0"  # example extra parameters
+    model_dir="spark/pretrained_models/Spark-TTS-0.5B", device="0"
 ):
     """
-    Orchestrates combined TTS and RVC processing using multiple worker threads.
+    Modified orchestration function using a dynamic priority queue for sentences.
     """
     # Step 1: Initialize environment and inputs.
     initialize_temp_dirs()
@@ -71,7 +72,10 @@ def generate_and_process_with_rvc_parallel(
      tts_complete_events, rvc_complete_events, 
      processing_complete) = create_queues_and_events(num_tts_workers, num_rvc_workers)
     
-    sentence_batches = create_sentence_batches(sentences, num_tts_workers)
+    # Create shared sentence priority queue
+    sentence_queue, sentence_count = create_sentence_priority_queue(sentences)
+    queue_lock = threading.Lock()
+    processed_count = multiprocessing.Value('i', 0)  # Shared counter for processed sentences
     
     info_messages = [f"Processing {len(sentences)} sentences using {num_tts_workers} TTS workers and {num_rvc_workers} RVC workers..."]
     yield "\n".join(info_messages), None  # initial status message
@@ -79,28 +83,27 @@ def generate_and_process_with_rvc_parallel(
     # Step 3: Start TTS worker threads.
     tts_threads = []
     for i in range(num_tts_workers):
-        if sentence_batches[i][0]:  # Only start if there are sentences for this worker.
-            thread = threading.Thread(
-                target=tts_worker,
-                args=(
-                    i,
-                    sentence_batches[i][0],
-                    sentence_batches[i][1],
-                    tts_streams[i],
-                    base_fragment_num,
-                    prompt_speech,
-                    prompt_text_clean,
-                    tts_to_rvc_queue,
-                    tts_complete_events,
-                    num_rvc_workers,
-                    model_dir,
-                    device
-                )
+        thread = threading.Thread(
+            target=tts_worker,
+            args=(
+                i,
+                sentence_queue,
+                sentence_count,
+                queue_lock,
+                processed_count,
+                tts_streams[i],
+                base_fragment_num,
+                prompt_speech,
+                prompt_text_clean,
+                tts_to_rvc_queue,
+                tts_complete_events,
+                num_rvc_workers,
+                model_dir,
+                device
             )
-            tts_threads.append(thread)
-            thread.start()
-        else:
-            tts_complete_events[i].set()
+        )
+        tts_threads.append(thread)
+        thread.start()
     
     # Step 4: Start RVC worker threads.
     rvc_threads = []
