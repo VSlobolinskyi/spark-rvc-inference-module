@@ -5,7 +5,7 @@ import os
 import threading
 from merged_ui.buffer_queue import OrderedAudioBufferQueue
 from merged_ui.utils import create_queues_and_events, create_sentence_priority_queue, get_base_fragment_num, initialize_cuda_streams, initialize_temp_dirs, prepare_audio_buffer, prepare_prompt, split_text_and_validate
-from merged_ui.worker_manager import get_model_manager
+from merged_ui.worker_manager import get_worker_manager
 
 
 def process_results(sentences, rvc_results_queue: multiprocessing.Queue, buffer: OrderedAudioBufferQueue, processing_complete):
@@ -95,7 +95,7 @@ def generate_and_process_with_rvc_parallel(
     info_messages = [f"Processing {len(sentences)} sentences using {num_tts_workers} TTS workers and {num_rvc_workers} RVC workers..."]
     yield "\n".join(info_messages), None  # initial status message
     
-    model_manager = get_model_manager(model_unload_delay)
+    model_manager = get_worker_manager(model_unload_delay)
 
     # Start or reuse TTS workers through the model manager
     for i in range(num_tts_workers):

@@ -2,7 +2,7 @@ import threading
 import time
 import logging
 import os
-from queue import Queue, Empty
+from queue import Queue
 
 from merged_ui.workers import persistent_rvc_worker, persistent_tts_worker
 
@@ -204,7 +204,7 @@ class WorkerManger:
 # Global model manager instance
 _model_manager = None
 
-def get_model_manager(unload_delay=None):
+def get_worker_manager(unload_delay=None):
     """
     Get or create the global model manager.
     
@@ -224,7 +224,7 @@ def get_model_manager(unload_delay=None):
 
 
 # Create functions for UI integration
-def set_model_unload_delay(delay):
+def set_worker_unload_delay(delay):
     """
     Set the model unload delay. Can be called directly from UI components.
     
@@ -237,16 +237,16 @@ def set_model_unload_delay(delay):
     if not isinstance(delay, int) or delay < 0:
         return "Invalid delay value. Please provide a positive integer."
     
-    get_model_manager(delay)
+    get_worker_manager(delay)
     return f"Model unload delay set to {delay} seconds"
 
 
-def get_current_model_unload_delay():
+def get_current_worker_unload_delay():
     """
     Get the current model unload delay.
     
     Returns:
         int: Current delay in seconds
     """
-    manager = get_model_manager()
+    manager = get_worker_manager()
     return manager.unload_delay
