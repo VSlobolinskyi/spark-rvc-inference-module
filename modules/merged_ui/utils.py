@@ -93,107 +93,21 @@ def create_sentence_priority_queue(sentences):
     
     return sentence_queue, len(sentences)
 
-def split_into_sentences(text, max_chunk_size=40):
+def split_into_sentences(text):
     """
-    Split text into balanced chunks for TTS processing.
-    
-    The function first splits the text into sentences, then tries to create chunks
-    of approximately equal size without breaking words. Long sentences are split at
-    natural phrase boundaries (commas, semicolons, colons) when possible.
+    Split text into sentences using regular expressions.
     
     Args:
         text (str): The input text to split
-        max_chunk_size (int): Target maximum size of each chunk in characters
         
     Returns:
-        list: A list of text chunks balanced for TTS processing
+        list: A list of sentences
     """
-    def split_long_text(text, max_size):
-        """Split a long text into chunks at natural phrase boundaries."""
-        result = []
-        
-        # Try to split on natural phrase boundaries
-        phrases = re.split(r'(?<=[,;:])\s+', text)
-        current_chunk = ""
-        
-        for phrase in phrases:
-            # If this phrase fits in the current chunk
-            if len(current_chunk) + len(phrase) + (1 if current_chunk else 0) <= max_size:
-                if current_chunk:
-                    current_chunk += " " + phrase
-                else:
-                    current_chunk = phrase
-            else:
-                # Add the current chunk if it exists
-                if current_chunk:
-                    result.append(current_chunk)
-                
-                # If the phrase itself is too long, split by words
-                if len(phrase) > max_size:
-                    words = phrase.split()
-                    word_chunk = ""
-                    
-                    for word in words:
-                        if len(word_chunk) + len(word) + (1 if word_chunk else 0) <= max_size:
-                            if word_chunk:
-                                word_chunk += " " + word
-                            else:
-                                word_chunk = word
-                        else:
-                            result.append(word_chunk)
-                            word_chunk = word
-                    
-                    current_chunk = word_chunk
-                else:
-                    current_chunk = phrase
-        
-        # Add the final chunk if it exists
-        if current_chunk:
-            result.append(current_chunk)
-        
-        return result
-    
-    # First split into sentences
+    # Split on period, exclamation mark, or question mark followed by space or end of string
     sentences = re.split(r'(?<=[.!?])\s+|(?<=[.!?])$', text)
+    # Remove any empty sentences
     sentences = [s.strip() for s in sentences if s.strip()]
-    
-    chunks = []
-    current_chunk = ""
-    
-    for sentence in sentences:
-        # If the sentence fits in the current chunk, add it
-        if len(current_chunk) + len(sentence) + (1 if current_chunk else 0) <= max_chunk_size:
-            if current_chunk:
-                current_chunk += " " + sentence
-            else:
-                current_chunk = sentence
-        else:
-            # This sentence won't fit in the current chunk
-            
-            # Add the current chunk if it exists
-            if current_chunk:
-                chunks.append(current_chunk)
-                current_chunk = ""
-            
-            # If the sentence itself is shorter than max_chunk_size, use it as the new current chunk
-            if len(sentence) <= max_chunk_size:
-                current_chunk = sentence
-            else:
-                # The sentence is too long, we need to split it
-                sentence_chunks = split_long_text(sentence, max_chunk_size)
-                
-                # Add all but the last chunk
-                if sentence_chunks:
-                    chunks.extend(sentence_chunks[:-1])
-                    current_chunk = sentence_chunks[-1]
-                else:
-                    current_chunk = ""
-    
-    # Add the last chunk if it exists
-    if current_chunk:
-        chunks.append(current_chunk)
-    
-    return chunks
+    return sentences
 
 
 def modified_get_vc(sid0_value, protect0_value, file_index2_component):
