@@ -8,7 +8,7 @@ class AudioBufferQueue:
     A buffer queue for audio file outputs that paces the release of files based on their duration.
     This ensures each audio file has time to finish playing before the next one is released.
     """
-    def __init__(self, buffer_time=1.0):
+    def __init__(self, buffer_time):
         """
         Initialize the buffer queue.
         
@@ -21,7 +21,6 @@ class AudioBufferQueue:
         self.current_duration = 0  # Duration of currently playing file in seconds
         self.playback_start_time = None  # When the current file started playing
         self.buffer_time = buffer_time  # Extra time to ensure complete playback
-        self.min_playback_time = 1.0  # Minimum time to keep an audio playing, even if it's shorter
         
     def add(self, file_path):
         """
@@ -61,7 +60,7 @@ class AudioBufferQueue:
             elapsed_time = current_time - self.playback_start_time
             
             # Effective playback time includes buffer time for Gradio initialization
-            effective_duration = max(self.current_duration + self.buffer_time, self.min_playback_time)
+            effective_duration = self.current_duration + self.buffer_time
             time_remaining = effective_duration - elapsed_time
             
             # Debugging information
@@ -87,7 +86,7 @@ class AudioBufferQueue:
             self.playback_start_time = current_time
             
             # Calculate effective duration with buffer
-            effective_duration = max(duration + self.buffer_time, self.min_playback_time)
+            effective_duration = duration + self.buffer_time
             logging.info(f"Started playing {file_path} " + 
                          f"(duration: {duration:.2f}s, effective: {effective_duration:.2f}s)")
             return file_path
@@ -119,7 +118,7 @@ class OrderedAudioBufferQueue(AudioBufferQueue):
     Enhanced audio buffer queue that maintains sequential order regardless of when files are added.
     Files can be processed in parallel but will be played in the correct sequence.
     """
-    def __init__(self, buffer_time=1.0):
+    def __init__(self, buffer_time=0.5):
         super().__init__(buffer_time)
         # Dictionary to store pending files by their position
         self.pending_files = {}  # {position: (file_path, duration)}
