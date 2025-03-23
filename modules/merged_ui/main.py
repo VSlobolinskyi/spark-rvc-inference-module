@@ -1,7 +1,8 @@
 import gradio as gr
 
 # Import modules from your packages
-from merged_ui.utils import generate_and_process_with_rvc_parallel, modified_get_vc
+from merged_ui.model_threading import generate_and_process_with_rvc_parallel
+from merged_ui.utils import modified_get_vc
 from rvc_ui.initialization import config
 from rvc_ui.main import names, index_paths
 
@@ -114,6 +115,22 @@ def build_merged_ui():
                             step=1,
                             interactive=True,
                         )
+                        rvc_workers = gr.Slider(
+                            minimum=1,
+                            maximum=8,
+                            label="Set the number of threads for RVC processing:",
+                            value=1,
+                            step=1,
+                            interactive=True,
+                        )
+                        spark_wokrers = gr.Slider(
+                            minimum=1,
+                            maximum=8,
+                            label="Set the number of threads for Spark TTS processing:",
+                            value=2,
+                            step=1,
+                            interactive=True,
+                        )
                 
                 # Speaker ID (hidden)
                 spk_item = gr.Slider(
@@ -151,6 +168,8 @@ def build_merged_ui():
                         resample_sr0,
                         rms_mix_rate0,
                         protect0,
+                        spark_wokrers,
+                        rvc_workers
                     ],
                     outputs=[vc_output1, vc_output2]
                 )
