@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import threading
 import logging
 from queue import PriorityQueue, Queue
@@ -13,8 +14,20 @@ model_dir = "spark/pretrained_models/Spark-TTS-0.5B"
 device = 0
 
 def initialize_temp_dirs():
-    os.makedirs("./TEMP/spark", exist_ok=True)
-    os.makedirs("./TEMP/rvc", exist_ok=True)
+    temp_dirs = ["./TEMP/spark", "./TEMP/rvc"]
+    for dir_path in temp_dirs:
+        os.makedirs(dir_path, exist_ok=True)
+        for filename in os.listdir(dir_path):
+            file_path = os.path.join(dir_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                    logging.info(f"Removed file: {file_path}")
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+                    logging.info(f"Removed directory: {file_path}")
+            except Exception as e:
+                logging.error(f"Failed to delete {file_path}. Reason: {e}")
 
 def prepare_audio_buffer(buffer_time=1.0):
     """
