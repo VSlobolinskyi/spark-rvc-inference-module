@@ -118,7 +118,7 @@ class OrderedAudioBufferQueue(AudioBufferQueue):
     Enhanced audio buffer queue that maintains sequential order regardless of when files are added.
     Files can be processed in parallel but will be played in the correct sequence.
     """
-    def __init__(self, buffer_time=0.5):
+    def __init__(self, buffer_time=0.0):
         super().__init__(buffer_time)
         # Dictionary to store pending files by their position
         self.pending_files = {}  # {position: (file_path, duration)}
