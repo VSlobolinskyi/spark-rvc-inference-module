@@ -26,6 +26,7 @@ wheels/
 .pytest_cache/
 .coverage
 htmlcov/
+project_tree.json
 
 # IDE settings
 .idea/

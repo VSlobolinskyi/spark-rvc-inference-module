@@ -29,7 +29,7 @@ def initialize_temp_dirs():
             except Exception as e:
                 logging.error(f"Failed to delete {file_path}. Reason: {e}")
 
-def prepare_audio_buffer(buffer_time=1.0):
+def prepare_audio_buffer(buffer_time=1.5):
     """
     Create and return an OrderedAudioBufferQueue for managing audio output order.
     """
@@ -103,10 +103,24 @@ def split_into_sentences(text):
     Returns:
         list: A list of sentences
     """
-    # Split on period, exclamation mark, or question mark followed by space or end of string
-    sentences = re.split(r'(?<=[.!?])\s+|(?<=[.!?])$', text)
-    # Remove any empty sentences
+    sentences = re.split(r'(?<=[.!?,:;—–-])\s+|(?<=[.!?,:;—–-])$', text)
     sentences = [s.strip() for s in sentences if s.strip()]
+
+    # Combine sentences with < 3 words with the next sentence
+    combined = []
+    i = 0
+    while i < len(sentences):
+        current = sentences[i]
+        
+        # If current sentence has < 3 words, combine with next (if exists)
+        while len(current.split()) < 3 and i + 1 < len(sentences):
+            i += 1
+            current += " " + sentences[i]
+        
+        combined.append(current)
+        i += 1
+
+    sentences = combined
     return sentences
 
 

@@ -7,7 +7,7 @@ from queue import Queue
 from merged_ui.workers import persistent_rvc_worker, persistent_tts_worker
 
 # Get model delay from environment variable or use default
-DEFAULT_MODEL_DELAY = int(os.environ.get('MODEL_UNLOAD_DELAY', 30))
+DEFAULT_MODEL_DELAY = int(os.environ.get('MODEL_UNLOAD_DELAY', 60))
 
 class WorkerManger:
     """
