@@ -71,6 +71,12 @@ autoflake = "2.3.1"
 einops = "0.8.1"
 einx = "0.3.0"
 transformers = "4.49.0"
+# ---------------------------------------------------------------------------
+omegaconf = "2.3.0"
+soxr = "0.5.0.post1"
+tritonclient = "*"
+tensorrt-llm = "*"
+nvidia-triton-server-client = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
