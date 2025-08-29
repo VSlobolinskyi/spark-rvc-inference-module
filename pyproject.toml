@@ -75,8 +75,10 @@ transformers = "4.49.0"
 omegaconf = "2.3.0"
 soxr = "0.5.0.post1"
 tritonclient = "*"
-tensorrt-llm = "*"
 nvidia-triton-server-client = "*"
+tensorrt-llm = "*"
+tensorrt = "*"
+
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
